@@ -1,27 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-    <body>
-        <section class="homepage">
+{% extends "./_layout.njk" %}
 
-            <h1 class="section1_title">Tableau de bord</h1>
+{% block titlePage %}
+    <title>Tableau de bord</title>
+{% endblock %}
 
-            <div class="section1_links">
-                <a class="link" href="">Site Web</a>
-                <a class="link" href="">Analytics</a>
+{% block section %}
+
+    <header>
+
+        <h1 class="text-2xl pb-6 font-semibold">Tableau de bord</h1>
+
+        <div class="py-2 flex ">
+            <div class="mr-4 " >
+                <a class="text-[#6758c5] text-sm mr-2 flex items-center" href="">Site web <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[#6758c5] ml-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                    </svg>
+                </a>
 
             </div>
-            <div class="last_articles">
-                <h2 class="last_articles_title">3 derniers articles</h2>
-                <div class="articles_list">
-                    <div class="article">
-                        <img class="img_article" src="{{}}"/>
-                        <h3 class="title_article">{{}}</h3>
+            <div class="mr-4 " >
+                <a class="text-[#6758c5] text-sm mr-2 flex items-center" href="">Analytics <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[#6758c5] ml-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                    </svg>
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+    <main>
+
+        <h2 class="text-lg font-semibold  pt-8 pb-2">3 derniers articles</h2>
+        <div class="border border-black rounded-md">
+            {%for article in highlightArticles%}
+                <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
+                    <div class="w-1/6 ">
+                        <img class="" src="{{article.img}}"/>
+                    </div>
+                    <div class="w-full pl-4">
+                        <h3 class="text-base font-semibold flex">{{article.title}}</h3>
+                        <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.category}}</p>
+
+                        <div class="flex mt-2 justify-between items-center">
+                            <div>
+                                <p class="text-xs">Dernière modification le {{article.date}}
+                                </p>
+                            </div>
+
+                            <div class="text-sm">
+                                <a class="text-gray-300 bg-[#6758c5] hover:bg-[#4c34e0] font-medium rounded-md inline-block px-2 py-0.5 mr-2 hover:text-white" href="">
+                                    <button class="inline-flex items-center">Publié <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 ml-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                                        </svg>
+                                    </button>
+                                </a>
+                                <a class="text-gray-300 bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mr-2 hover:bg-[#4c34e0] hover:text-white" href="/edition?id={{article.id}}">
+                                    <button>Editer</button>
+                                </a>
+                                <a class="text-gray-300 bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 hover:bg-[#4c34e0] hover:text-white" href="">
+                                    <button>Supprimer</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </section>
+            {% endfor %}
+        </div>
 
-    </body>
-
-</html>
+        <div class="mt-3">
+            <a class="text-[#6758c5] text-sm" href="/articles?page=1">Voir tous les articles</a>
+        </div>
+    </main>
+{% endblock %}
