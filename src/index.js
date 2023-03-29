@@ -88,9 +88,6 @@ async function handleServer(request, response) {
       articleCategories: ARTICLE_CATEGORIES,
     };
 
-    if (requestURLData.pathname === "/articles/nl5t6pfct1") {
-      templatePath = "src/template/articles/edit.njk";
-    }
     console.log({ templatePath });
     const html = nunjucks.render(templatePath, templateData);
     response.end(html);
