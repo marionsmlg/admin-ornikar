@@ -13,9 +13,12 @@
   "license": "ISC",
   "devDependencies": {
     "autocannon": "^7.10.0",
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.21",
+    "nunjucks-date-filter": "^0.1.1"
   },
   "dependencies": {
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.42",
     "nanoid": "^4.0.1",
     "nunjucks": "^3.2.3"
   }

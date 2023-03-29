@@ -1,27 +1,10 @@
-{% extends "./_layout.njk" %}
+{% extends "../_layout.njk" %}
 
 {% block titlePage %}
     <title>Articles / Création</title>
 {% endblock %}
 
 {% block section %}
-
-    {% if searchParams.submitSuccess %}
-        <div class="rounded-md bg-green-50 p-4 mb-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">
-                            Article publié avec succès !
-                        </p>
-                </div>
-            </div>
-        </div>
-    {% endif %}
 
     <header>
         <div class="flex justify-between pb-8">
@@ -39,7 +22,7 @@
         <form method="POST">
             <div class="flex flex-col pb-4">
                 <label for="title" class="pb-2 font-semibold">Titre</label>
-                <input name="title" id="title" value="" class="border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
+                <input name="title" id="title" class="border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
             </div>
 
             <div class="pb-4">
@@ -47,8 +30,8 @@
                 <div class="relative mt-2 rounded-md shadow-sm">
                     <select id="category" name="category" class="focus:ring-0 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 py-1">
                         <option value="">--Sélectionnez une catégorie--</option>
-                        {% for categorie in categories %}
-                            <option value="{{categorie}}">{{categorie}}</option>
+                        {% for articleCategory in articleCategories %}
+                            <option value="{{articleCategory}}">{{articleCategory}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -58,12 +41,12 @@
                 <label class="font-semibold">Statut</label>
                 <div class="flex mt-2">
                     <div>
-                        <input type="radio" name="status" value="Brouillon" checked="checked" class="text-indigo-600 focus:ring-0">
+                        <input type="radio" name="status" value="draft" checked="checked" class="text-indigo-600 focus:ring-0">
                         <label>Brouillon</label>
                     </div>
 
                     <div class="ml-12">
-                        <input type="radio" name="status" value="Publié" class="text-indigo-600 focus:ring-0">
+                        <input type="radio" name="status" value="published" class="text-indigo-600 focus:ring-0">
                         <label>Publié</label>
                     </div>
                 </div>

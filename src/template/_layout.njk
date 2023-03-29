@@ -5,18 +5,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block titlePage %}{% endblock %}
-
     </head>
 
     <body class="flex">
-
         <nav class="flex flex-col bg-[#6758c5] w-1/6 h-screen">
-            <h1 class="text-gray-300 font-medium pt-4 pb-8 px-4">ADMIN</h1>
+            <a class="text-gray-300 font-medium py-3 mb-4 px-4 hover:text-white hover:bg-[#4c34e0] block rounded-md" href="/">ADMIN</a>
 
-            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/articles?page=1">Articles</a>
-            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/">Homepage</a>
-            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="">Header</a>
-            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="">Footer</a>
+            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/articles">Articles</a>
+            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/homepage">Homepage</a>
+            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/header">Header</a>
+            <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/footer">Footer</a>
         </nav>
 
         <section class="w-full px-40 py-10">

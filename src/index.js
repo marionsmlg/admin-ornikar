@@ -12,13 +12,19 @@ import path from "path";
 import { readFile } from "fs/promises";
 import fs from "fs/promises";
 import { customAlphabet } from "nanoid";
+import dateFilter from "nunjucks-date-filter";
+import moment from "moment";
 
-nunjucks.configure({
+let env = nunjucks.configure({
   noCache: true,
 });
+env.addFilter("date", dateFilter);
+env.addGlobal("moment", moment);
+
+moment.locale("fr");
 
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
-const categories = [
+const ARTICLE_CATEGORIES = [
   "Assurance auto",
   "Code de la route",
   "Permis de conduire",
@@ -29,8 +35,6 @@ const categories = [
 ];
 
 const ARTICLES_DATA_PATH = "src/data/articles.json";
-const DRAFT_ARTICLES_DATA_PATH = "src/data/draft.json";
-const articles = await readJSON(ARTICLES_DATA_PATH);
 const PORT = 3000;
 
 const server = http.createServer(async (request, response) => {
@@ -60,6 +64,7 @@ async function handleServer(request, response) {
     }
 
     let templatePath = `src/template${requestURLData.pathname}`;
+
     if (await isDir(templatePath)) {
       templatePath = path.join(templatePath, "index.njk");
     } else if (await isFile(`${templatePath}.njk`)) {
@@ -68,7 +73,9 @@ async function handleServer(request, response) {
       render404(response);
       return;
     }
+
     const searchParams = Object.fromEntries(requestURLData.searchParams);
+    const articles = await readJSON(ARTICLES_DATA_PATH);
     const indexArticle = articles.findIndex(
       (article) => article.id === searchParams.id
     );
@@ -77,31 +84,47 @@ async function handleServer(request, response) {
       searchParams: searchParams,
       highlightArticles: articles.slice(0, 3),
       articles: articles,
-      indexArticle: indexArticle,
-      categories: categories,
+      article: articles[indexArticle],
+      articleCategories: ARTICLE_CATEGORIES,
     };
 
+    if (requestURLData.pathname === "/articles/nl5t6pfct1") {
+      templatePath = "src/template/articles/edit.njk";
+    }
+    console.log({ templatePath });
     const html = nunjucks.render(templatePath, templateData);
     response.end(html);
   } else if (request.method === "POST") {
     const body = await readBody(request);
     const form = convertFormDataToJSON(body);
     const searchParams = Object.fromEntries(requestURLData.searchParams);
+    const articles = await readJSON(ARTICLES_DATA_PATH);
     const indexArticle = articles.findIndex(
       (article) => article.id === searchParams.id
     );
+    const indexToDelete = articles.findIndex(
+      (article) => article.id === form.id
+    );
 
-    if (request.url === `/edition?id=${searchParams.id}`) {
+    if (requestURLData.pathname === `/articles/edit`) {
       await modifyDataInJSONFile(ARTICLES_DATA_PATH, form, indexArticle);
+      response.statusCode = 302;
+      response.setHeader("Location", `/articles?editSuccess=true`);
+      response.end();
+    } else if (requestURLData.pathname === "/delete") {
+      await deleteDataInJSONFile(ARTICLES_DATA_PATH, indexToDelete);
+      response.statusCode = 302;
+      response.setHeader("Location", `/articles?deleteSuccess=true`);
+      response.end();
     } else {
       await addDataInJSONFile(ARTICLES_DATA_PATH, form);
+      response.statusCode = 302;
+      response.setHeader(
+        "Location",
+        `${requestURLData.pathname}?createSuccess=true`
+      );
+      response.end();
     }
-    response.statusCode = 302;
-    response.setHeader(
-      "Location",
-      `${requestURLData.pathname}?submitSuccess=true`
-    );
-    response.end();
   } else {
     render404(response);
   }
@@ -128,35 +151,13 @@ function render404(response) {
 
 async function addDataInJSONFile(jsonPath, dataToAdd) {
   dataToAdd.id = nanoid();
-  dataToAdd.date = getDateAndTimeFormatFr(new Date());
+  dataToAdd.createdAt = new Date().toISOString();
+  dataToAdd.updatedAt = "";
   const data = await readJSON(jsonPath);
   data.unshift(dataToAdd);
   const dataStr = JSON.stringify(data, null, 2);
   fs.writeFile(jsonPath, dataStr);
   return data;
-}
-
-function getDateAndTimeFormatFr(date) {
-  let dateFormat = new Date(date);
-  let options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  let dateFormatFr = dateFormat.toLocaleDateString("fr", options);
-  let time = `${addZero(dateFormat.getHours())}h${addZero(
-    dateFormat.getMinutes()
-  )}`;
-
-  return `${dateFormatFr} à ${time}`;
-}
-
-function addZero(n) {
-  if (n < 10) {
-    return "0" + n;
-  } else {
-    return n;
-  }
 }
 
 async function modifyDataInJSONFile(jsonPath, jsonData, indexData) {
@@ -166,7 +167,8 @@ async function modifyDataInJSONFile(jsonPath, jsonData, indexData) {
   dataArticle.category = jsonData.category;
   dataArticle.img = jsonData.img;
   dataArticle.content = jsonData.content;
-  dataArticle.date = getDateAndTimeFormatFr(new Date());
+  dataArticle.updatedAt = new Date().toISOString();
+  dataArticle.status = jsonData.status;
   dataArticle.description = jsonData.description;
 
   const dataStr = JSON.stringify(data, null, 2);
@@ -181,4 +183,12 @@ async function deleteDataInJSONFile(jsonPath, indexToDelete) {
   const dataStr = JSON.stringify(data, null, 2);
   fs.writeFile(jsonPath, dataStr);
   return data;
+}
+
+async function getIndexArticle(searchParams) {
+  const articles = await readJSON(ARTICLES_DATA_PATH);
+  const indexArticle = articles.findIndex(
+    (article) => article.id === searchParams.id
+  );
+  return indexArticle;
 }
