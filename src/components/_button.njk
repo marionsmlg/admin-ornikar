@@ -1,0 +1,7 @@
+{% macro smButton(text, attrs = {}) %}
+    <button {% for attr, value in attrs %} {{ attr }}="{{ value }}" {% endfor %} class="inline-flex items-center text-gray-300 bg-[#6758c5] hover:bg-[#4c34e0] font-medium rounded-md inline-block px-2 py-0.5 mr-2 hover:text-white">{{ text }}</button>
+{% endmacro %}
+
+{% macro mdButton(text, attrs = {}) %}
+    <button {% for attr, value in attrs %} {{ attr }}="{{ value }}" {% endfor %} class="text-gray-300 bg-[#6758c5] hover:bg-[#4c34e0] font-medium rounded-md inline-block px-2 py-0.5 hover:text-white">{{ text }}</button>
+{% endmacro %}

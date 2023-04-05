@@ -1,0 +1,50 @@
+{% extends "src/components/_layout.njk" %}
+{% import "src/components/_button.njk" as button %}
+
+{% block titlePage %}
+    <title>Catégories</title>
+{% endblock %}
+
+{% block section %}
+
+    {% set categoryValue = "" %}
+    <h1 class="text-2xl mb-10 font-semibold">Catégories</h1>
+
+    <div class="pb-4">
+        <label for="category" class="pb-2 font-semibold">Editer une catégorie</label>
+        <div class="relative mt-2 rounded-md shadow-sm">
+            <select id="category" name="category" class="focus:ring-0 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 py-1 ">
+                <option value="{{categoryValue}}">--Sélectionnez une catégorie--</option>
+                {% for i in range(0, articleCategories.length) %}
+                    {% set articleCategory = articleCategories[i] %}
+                    {% set categoryValue = articleCategory.name %}
+                    <option value="{{categoryValue}}">{{categoryValue}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="flex items-end">
+        <div class="flex flex-col">
+            <textarea id="name" name="name" rows="1" class="resize-none mt-1 block w-80 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{categoryValue}}</textarea>
+        </div>
+        <div  class="ml-4">
+            {{button.smButton("Sauvegarder",{"type":"submit"})}}
+        </div>
+        <div  class="ml-4">
+            {{button.smButton("Supprimer",{"type":"submit"})}}
+        </div>
+    </div>
+
+    <form method="POST" >
+        <div class="flex items-end">
+            <div class="flex flex-col">
+                <label for="name" class="pb-2 pr-2 font-semibold mt-16">Ajouter une catégorie</label>
+                <input name="name" id="name" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 mr-4"/>
+            </div>
+            <div  class="ml-4">
+                {{button.smButton("Ajouter",{"type":"submit"})}}
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
