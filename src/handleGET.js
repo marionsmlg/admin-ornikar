@@ -10,7 +10,8 @@ import path from "path";
 import nunjucks from "nunjucks";
 
 const ARTICLE_CATEGORIES_DATA_PATH = "src/data/articleCategories.json";
-const GLOBAL_DATA_PATH = "src/data/global.json";
+const FOOTER_DATA_PATH = "src/data/footer.json";
+const HEADER_DATA_PATH = "src/data/header.json";
 const ARTICLES_DATA_PATH = "src/data/articles.json";
 
 export async function handleGET(response, requestURLData) {
@@ -41,7 +42,8 @@ export async function handleGET(response, requestURLData) {
   const searchParams = Object.fromEntries(requestURLData.searchParams);
   const articles = await readJSON(ARTICLES_DATA_PATH);
   const article = articles.find((article) => article.id === basenameURL);
-  const globalData = await readJSON(GLOBAL_DATA_PATH);
+  const footerData = await readJSON(FOOTER_DATA_PATH);
+  const headerData = await readJSON(HEADER_DATA_PATH);
 
   const templateData = {
     searchParams: searchParams,
@@ -49,9 +51,9 @@ export async function handleGET(response, requestURLData) {
     articles: articles,
     article: article,
     articleCategories: await readJSON(ARTICLE_CATEGORIES_DATA_PATH),
-    dataNavbar: globalData.navlinks,
-    footerLinks: globalData.footerLinks,
-    footerSocialMedia: globalData.footerSocialMedia,
+    dataNavbar: headerData.navlinks,
+    footerLinks: footerData.footerLinks,
+    footerSocialMedia: footerData.footerSocialMedia,
   };
 
   const html = nunjucks.render(templatePath, templateData);

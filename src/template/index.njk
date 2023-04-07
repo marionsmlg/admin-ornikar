@@ -35,6 +35,7 @@
         <h2 class="text-lg font-semibold  pt-8 pb-2">3 derniers articles</h2>
         <div class="border border-black rounded-md">
             {% for article in highlightArticles %}
+                {% set i = loop.index0 %}
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
                         <img class="" src="{{article.img}}"/>
@@ -64,11 +65,11 @@
                                     <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mr-2">Brouillon</p>
                                 {% endif %}
                                 <a href="/articles/{{article.id}}">
-                                    {{ button.smButton("Editer") }}
+                                    {{ button.primaryButton("Editer") }}
                                 </a>
-                                <form class="inline-flex" action="/deleteArticle" method="POST">
-                                    <input type="hidden" name="id" value="{{article.id}}"/>
-                                    {{ button.smButton("Supprimer",{"type": "submit"}) }}
+                                <form class="inline-flex" action="/article/delete" method="POST">
+                                    <input type="hidden" name="index" value="{{i}}"/>
+                                    {{ button.primaryButton("Supprimer",{"type": "submit"}) }}
                                 </form>
                             </div>
 

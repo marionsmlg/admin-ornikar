@@ -97,18 +97,18 @@ export function render404(response) {
   response.end(html);
 }
 
-export async function addDataInJSONFile(jsonPath, dataToAdd) {
+export async function addArticle(dataToAdd) {
   dataToAdd.id = nanoid();
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
-  const data = await readJSON(jsonPath);
+  const data = await readJSON("src/data/articles.json");
   data.unshift(dataToAdd);
-  await writeJSON(jsonPath, data);
+  await writeJSON("src/data/articles.json", data);
   return data;
 }
 
-export async function modifyDataInJSONFile(jsonPath, jsonData, indexData) {
-  const data = await readJSON(jsonPath);
+export async function editArticle(jsonData, indexData) {
+  const data = await readJSON("src/data/articles.json");
   const dataArticle = data[indexData];
   dataArticle.title = jsonData.title;
   dataArticle.category = jsonData.category;
@@ -118,15 +118,15 @@ export async function modifyDataInJSONFile(jsonPath, jsonData, indexData) {
   dataArticle.status = jsonData.status;
   dataArticle.description = jsonData.description;
 
-  await writeJSON(jsonPath, data);
+  await writeJSON("src/data/articles.json", data);
   return data;
 }
 
-export async function deleteDataInJSONFile(jsonPath, indexToDelete) {
-  const data = await readJSON(jsonPath);
+export async function deleteArticle(indexToDelete) {
+  const data = await readJSON("src/data/articles.json");
   data.splice(indexToDelete, 1);
 
-  await writeJSON(jsonPath, data);
+  await writeJSON("src/data/articles.json", data);
   return data;
 }
 
@@ -174,42 +174,15 @@ export async function articleIDExists(id) {
   }
 }
 
-export async function addElementinNavbar(dataToAdd) {
-  const data = await readJSON("src/data/global.json");
+export async function addLinkInNavbar(dataToAdd) {
+  const data = await readJSON("src/data/header.json");
   const navlinks = data.navlinks;
   navlinks.unshift(dataToAdd);
-  await writeJSON("src/data/global.json", data);
+  await writeJSON("src/data/header.json", data);
   return data;
 }
-
-export async function deleteElementInNavbar(indexToDelete) {
-  const data = await readJSON("src/data/global.json");
-  const navlinks = data.navlinks;
-  navlinks.splice(indexToDelete, 1);
-
-  await writeJSON("src/data/global.json", data);
-  return data;
-}
-
-export async function addLinkinFooter(dataToAdd) {
-  const data = await readJSON("src/data/global.json");
-  const footerLinks = data.footerLinks;
-  footerLinks.unshift(dataToAdd);
-  await writeJSON("src/data/global.json", data);
-  return data;
-}
-
-export async function deleteLinkinFooter(indexToDelete) {
-  const data = await readJSON("src/data/global.json");
-  const footerLinks = data.footerLinks;
-  footerLinks.splice(indexToDelete, 1);
-
-  await writeJSON("src/data/global.json", data);
-  return data;
-}
-
-export async function modifyElementinNavbar(jsonData) {
-  const data = await readJSON("src/data/global.json");
+export async function editLinkInNavbar(jsonData) {
+  const data = await readJSON("src/data/header.json");
   const dataNavbar = data.navlinks;
 
   for (let i = 0; i < dataNavbar.length; i++) {
@@ -217,12 +190,38 @@ export async function modifyElementinNavbar(jsonData) {
     dataNavbar[i].href = jsonData[`href${i}`];
   }
 
-  await writeJSON("src/data/global.json", data);
+  await writeJSON("src/data/header.json", data);
   return data;
 }
 
-export async function modifyLinkinFooter(jsonData) {
-  const data = await readJSON("src/data/global.json");
+export async function deleteLinkInNavbar(indexToDelete) {
+  const data = await readJSON("src/data/header.json");
+  const navlinks = data.navlinks;
+  navlinks.splice(indexToDelete, 1);
+
+  await writeJSON("src/data/header.json", data);
+  return data;
+}
+
+export async function addLinkInFooter(dataToAdd) {
+  const data = await readJSON("src/data/footer.json");
+  const footerLinks = data.footerLinks;
+  footerLinks.unshift(dataToAdd);
+  await writeJSON("src/data/footer.json", data);
+  return data;
+}
+
+export async function deleteLinkInFooter(indexToDelete) {
+  const data = await readJSON("src/data/footer.json");
+  const footerLinks = data.footerLinks;
+  footerLinks.splice(indexToDelete, 1);
+
+  await writeJSON("src/data/footer.json", data);
+  return data;
+}
+
+export async function editLinkInFooter(jsonData) {
+  const data = await readJSON("src/data/footer.json");
   const footerLinks = data.footerLinks;
 
   for (let i = 0; i < footerLinks.length; i++) {
@@ -230,19 +229,19 @@ export async function modifyLinkinFooter(jsonData) {
     footerLinks[i].href = jsonData[`href${i}`];
   }
 
-  await writeJSON("src/data/global.json", data);
+  await writeJSON("src/data/footer.json", data);
   return data;
 }
 
-export async function modifySocialMediainFooter(jsonData) {
-  const data = await readJSON("src/data/global.json");
+export async function editSocialMediaInFooter(jsonData) {
+  const data = await readJSON("src/data/footer.json");
   const footerSocialMedia = data.footerSocialMedia;
 
   for (let i = 0; i < footerSocialMedia.length; i++) {
     footerSocialMedia[i].href = jsonData[`href${i}`];
   }
 
-  await writeJSON("src/data/global.json", data);
+  await writeJSON("src/data/footer.json", data);
   return data;
 }
 
@@ -250,7 +249,28 @@ export async function addArticleCategory(dataToAdd) {
   const data = await readJSON("src/data/articleCategories.json");
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
+  dataToAdd.id = nanoid();
   data.unshift(dataToAdd);
+  await writeJSON("src/data/articleCategories.json", data);
+  return data;
+}
+
+export async function deleteArticleCategory(indexToDelete) {
+  const data = await readJSON("src/data/articleCategories.json");
+
+  data.splice(indexToDelete, 1);
+
+  await writeJSON("src/data/articleCategories.json", data);
+  return data;
+}
+
+export async function editArticleCategory(jsonData) {
+  const data = await readJSON("src/data/articleCategories.json");
+
+  for (let i = 0; i < data.length; i++) {
+    data[i].name = jsonData[`name${i}`];
+    data[i].updatedAt = new Date().toISOString();
+  }
   await writeJSON("src/data/articleCategories.json", data);
   return data;
 }

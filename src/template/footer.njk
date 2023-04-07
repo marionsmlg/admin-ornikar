@@ -6,75 +6,77 @@
 {% endblock %}
 
 {% block section %}
-
-    <h1 class="text-2xl pb-6 font-semibold">Footer</h1>
-
     <main>
-        <form action="/modifyLinkFooter" method="POST">
+
+        <h1 class="text-2xl pb-6 font-semibold">Footer</h1>
+
+        <form action="/footer/link/edit" method="POST">
             <div class="flex mt-6 items-center justify-between">
-                <h2 class="text-md font-semibold">Eléments du footer</h2>
+                <h2 class="text-md font-semibold">Liens du footer</h2>
                 <div>
-                    {{button.mdButton("Sauvegarder",{"type":"submit"})}}
+                    {{button.primaryButton("Sauvegarder",{"type":"submit"})}}
                 </div>
             </div>
-            {% for i in range(0, footerLinks.length) -%}
-                {% set footerLink = footerLinks[i] %}
+            {% for footerLink in footerLinks%}
+                {% set i = loop.index0 %}
                 <div class="flex">
                     <div class="flex flex-col mt-4 mr-4">
-                        {%if i === 0%}
+                        {% if i === 0 %}
                             <label for="title{{i}}" class="pb-2 font-semibold">Titre</label>
-                            {% endif%}
-                            <textarea id="title{{i}}" name="title{{i}}" rows="1" class="resize-none mt-1 block w-96 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{footerLink.title}}</textarea>
+                        {% endif %}
+                        <textarea id="title{{i}}" name="title{{i}}" rows="1" class="resize-none mt-1 block w-96 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{footerLink.title}}</textarea>
+                    </div>
+                    <div class="flex flex-col mt-4 ml-16">
+                        {% if i === 0 %}
+                            <label for="href{{i}}" class="pb-2 font-semibold">Lien</label>
+                        {% endif %}
+                        <textarea id="href{{i}}" name="href{{i}}" rows="1" class="w-96 resize-none mt-1 block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{footerLink.href}}</textarea>
+                    </div>
+                </div>
+            {% endfor %}
+        </form>
+
+        <h2 class="text-md pb-4 font-semibold mt-16">Ajouter un lien</h2>
+        <form action="/footer/link/add" method="POST" >
+            <div class="flex items-end justify-between">
+                <div class="flex flex-col">
+                    <label for="title" class="pb-2 pr-2 font-semibold">Titre</label>
+                    <input required name="title" id="title" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 mr-4"/>
+                </div>
+                <div class="flex flex-col">
+                    <label for="href" class="pb-2 pr-2 font-semibold">Lien</label>
+                    <input required name="href" id="href" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
+                </div>
+                <div  class="ml-4">
+                    {{button.primaryButton("Ajouter",{"type":"submit"})}}
+                </div>
+            </div>
+        </form>
+
+        <div class="border border-t-black border-transparent mt-16">
+            <form action="/footer/socialmedia/edit" method="POST">
+                <div class="flex mt-6 items-center justify-between">
+                    <h2 class="text-md pb-4 font-semibold">Réseaux sociaux</h2>
+                    <div>
+                        {{button.primaryButton("Sauvegarder",{"type":"submit"})}}
+                    </div>
+                </div>
+                <div class="flex flex-wrap">
+                    {% for socialMedia in footerSocialMedia %}
+                        {% set i = loop.index0 %}
+
+                        <div class="flex flex-col mt-4">
+
+                            <label for="href{{i}}" class="pb-2 font-semibold">{{socialMedia.name}}</label>
+
+                            <textarea id="href{{i}}" name="href{{i}}" rows="1" class="w-96 resize-none mt-1 block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6 mr-16">{{socialMedia.href}}</textarea>
                         </div>
-                        <div class="flex flex-col mt-4 ml-16">
-                            {%if i === 0%}
-                                <label for="href{{i}}" class="pb-2 font-semibold">Lien</label>
-                                {% endif%}
-                                <textarea id="href{{i}}" name="href{{i}}" rows="1" class="w-96 resize-none mt-1 block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{footerLink.href}}</textarea>
-                            </div>
-                        </div>
+
                     {% endfor %}
-                </form>
+                </div>
+            </form>
 
-                <h2 class="text-md pb-4 font-semibold mt-16">Ajouter un élément</h2>
-                <form method="POST" >
-                    <div class="flex items-end justify-between">
-                        <div class="flex flex-col">
-                            <label for="title" class="pb-2 pr-2 font-semibold">Titre</label>
-                            <input name="title" id="title" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 mr-4"/>
-                        </div>
-                        <div class="flex flex-col">
-                            <label for="href" class="pb-2 pr-2 font-semibold">Lien</label>
-                            <input name="href" id="href" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
-                        </div>
-                        <div  class="ml-4">
-                            {{button.smButton("Ajouter",{"type":"submit"})}}
-                        </div>
-                    </div>
-                </form>
+        </div>
 
-                <div class="border border-t-black border-transparent mt-16">
-                    <form action="/modifySocialMediaFooter" method="POST">
-                        <div class="flex mt-6 items-center justify-between">
-                            <h2 class="text-md pb-4 font-semibold">Réseaux sociaux</h2>
-                            <div>
-                                {{button.mdButton("Sauvegarder",{"type":"submit"})}}
-                            </div>
-                        </div>
-                        {% for i in range(0, footerSocialMedia.length) -%}
-                            {% set socialMedia = footerSocialMedia[i] %}
-                            <div class="flex items-end">
-                                <div class="flex flex-col mt-4">
-                                    {%if i === 0%}
-                                        <label for="href{{i}}" class="pb-2 font-semibold">Lien</label>
-                                        {% endif%}
-                                        <textarea id="href{{i}}" name="href{{i}}" rows="1" class="w-96 resize-none mt-1 block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{socialMedia.href}}</textarea>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </form>
-
-                    </div>
-
-                </main>
-            {% endblock %}
+    </main>
+{% endblock %}

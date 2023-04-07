@@ -30,19 +30,18 @@
     {% endif %}
 
     {% set totalArticles = articles.length %}
-    <header>
+    <main>
+
         <div class="flex justify-between pb-8">
 
             <h1 class="text-2xl  font-semibold ">Articles ({{totalArticles}})</h1>
 
             <a href="/articles/create">
-                {{button.mdButton ("+ Nouveau")}}
+                {{button.primaryButton ("+ Nouveau")}}
             </a>
 
         </div>
-    </header>
 
-    <main>
         {% set articlesPerPage = 5 %}
         {% set currentPage = searchParams.page | default(1) | int %}
         {% set totalPages = (totalArticles / articlesPerPage) | round(0, "ceil") %}
@@ -51,7 +50,8 @@
 
         <div class="border border-black rounded-md">
 
-            {%for article in articles.slice(startIndex, endIndex)%}
+            {% for article in articles.slice(startIndex, endIndex) %}
+                {% set i = loop.index0 %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
@@ -83,11 +83,11 @@
                                 {% endif %}
 
                                 <a href="/articles/{{article.id}}">
-                                    {{button.smButton("Editer")}}
+                                    {{button.primaryButton("Editer")}}
                                 </a>
-                                <form class="inline-flex" action="/deleteArticle" method="POST">
-                                    <input type="hidden" name="id" value="{{article.id}}"/>
-                                    {{button.smButton("Supprimer",{"type": "submit"})}}
+                                <form class="inline-flex" action="/article/delete" method="POST">
+                                    <input type="hidden" name="index" value="{{i}}"/>
+                                    {{button.primaryButton("Supprimer",{"type": "submit"})}}
                                 </form>
                             </div>
                         </div>
@@ -100,13 +100,13 @@
         <div class="flex py-10 justify-between">
             {% if currentPage > 1 %}
                 <a href="/articles?page={{ currentPage - 1 }}">
-                    {{button.mdButton ("Page précédente",{"type": "submit"})}}
+                    {{button.primaryButton ("Page précédente",{"type": "submit"})}}
                 </a>
             {% endif %}
             <p class="flex">Page {{currentPage}}/{{totalPages}}</p>
             {% if currentPage < totalPages %}
                 <a href="/articles?page={{ currentPage + 1}}">
-                    {{button.mdButton ("Page suivante",{"type": "submit"})}}
+                    {{button.primaryButton ("Page suivante",{"type": "submit"})}}
                 </a>
             {% endif %}
 
