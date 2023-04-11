@@ -98,6 +98,13 @@ export function render404(response) {
 }
 
 export async function addArticle(dataToAdd) {
+  const dataArticlesCategories = await readJSON(
+    "src/data/articleCategories.json"
+  );
+  const articleCategory = dataArticlesCategories.find(
+    (articleCategory) => articleCategory.name === dataToAdd.category
+  );
+  dataToAdd.categoryId = articleCategory.id;
   dataToAdd.id = nanoid();
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
@@ -108,8 +115,15 @@ export async function addArticle(dataToAdd) {
 }
 
 export async function editArticle(jsonData, indexData) {
+  const dataArticlesCategories = await readJSON(
+    "src/data/articleCategories.json"
+  );
+  const articleCategory = dataArticlesCategories.find(
+    (articleCategory) => articleCategory.name === jsonData.category
+  );
   const data = await readJSON("src/data/articles.json");
   const dataArticle = data[indexData];
+  dataArticle.categoryId = articleCategory.id;
   dataArticle.title = jsonData.title;
   dataArticle.category = jsonData.category;
   dataArticle.img = jsonData.img;
@@ -246,12 +260,14 @@ export async function editSocialMediaInFooter(jsonData) {
 }
 
 export async function addArticleCategory(dataToAdd) {
-  const data = await readJSON("src/data/articleCategories.json");
+  const dataArticlesCategories = await readJSON(
+    "src/data/articleCategories.json"
+  );
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
   dataToAdd.id = nanoid();
   data.unshift(dataToAdd);
-  await writeJSON("src/data/articleCategories.json", data);
+  await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
   return data;
 }
 
@@ -265,12 +281,54 @@ export async function deleteArticleCategory(indexToDelete) {
 }
 
 export async function editArticleCategory(jsonData) {
-  const data = await readJSON("src/data/articleCategories.json");
+  const dataArticlesCategories = await readJSON(
+    "src/data/articleCategories.json"
+  );
 
-  for (let i = 0; i < data.length; i++) {
-    data[i].name = jsonData[`name${i}`];
-    data[i].updatedAt = new Date().toISOString();
+  for (let i = 0; i < dataArticlesCategories.length; i++) {
+    dataArticlesCategories[i].name = jsonData[`name${i}`];
+    dataArticlesCategories[i].updatedAt = new Date().toISOString();
   }
-  await writeJSON("src/data/articleCategories.json", data);
-  return data;
+
+  await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
+  return dataArticlesCategories;
+}
+
+// export async function editArticleCategory(jsonData) {
+//   const dataArticlesCategories = await readJSON(
+//     "src/data/articleCategories.json"
+//   );
+//   const dataArticles = await readJSON("src/data/articles.json");
+
+//   for (let i = 0; i < dataArticlesCategories.length; i++) {
+//     dataArticlesCategories[i].name = jsonData[`name${i}`];
+//     dataArticlesCategories[i].updatedAt = new Date().toISOString();
+//     const articleCategory = dataArticlesCategories.find(
+//       (articleCategory) => articleCategory.name === jsonData[`name${i}`]
+//     );
+//     const articleID = articleCategory.id;
+//     for (const article of dataArticles) {
+//       if (article.categoryId === articleID) {
+//         article.category = articleCategory.name;
+//         await writeJSON("src/data/articles.json", dataArticles);
+//       }
+//     }
+//   }
+//   await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
+//   return dataArticlesCategories;
+// }
+
+export async function editCategoriesinArticles() {
+  const dataArticlesCategories = await readJSON(
+    "src/data/articleCategories.json"
+  );
+  const dataArticles = await readJSON("src/data/articles.json");
+  for (let article of dataArticles) {
+    for (let category of dataArticlesCategories) {
+      if (article.categoryId === category.id) {
+        article.category = category.name;
+      }
+    }
+  }
+  await writeJSON("src/data/articles.json", dataArticles);
 }

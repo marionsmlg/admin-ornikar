@@ -7,6 +7,7 @@ import { handleGET } from "./handleGET.js";
 let env = nunjucks.configure({
   noCache: true,
 });
+
 env.addFilter("formatDate", formatDate);
 
 const PORT = 3000;

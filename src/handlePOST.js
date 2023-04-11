@@ -15,6 +15,7 @@ import {
   addArticleCategory,
   deleteArticleCategory,
   editArticleCategory,
+  editCategoriesinArticles,
 } from "./utils.js";
 import path from "path";
 
@@ -56,6 +57,7 @@ export async function handlePOST(request, response, requestURLData) {
       response.end();
     }
   } else if (requestURLData.pathname === "/articles/create") {
+    console.log(form);
     await addArticle(form);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?createSuccess=true`);
@@ -86,6 +88,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/footer?editSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/articles/categories/add") {
+    console.log({ form });
     await addArticleCategory(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?createSuccess=true`);
@@ -97,6 +100,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.end();
   } else if (requestURLData.pathname === "/articles/categories/edit") {
     await editArticleCategory(form);
+    // await editCategoriesinArticles();
     response.statusCode = 302;
     response.setHeader("Location", `/categories?createSuccess=true`);
     response.end();
