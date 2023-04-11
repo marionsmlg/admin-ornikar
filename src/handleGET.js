@@ -22,6 +22,28 @@ export async function handleGET(response, requestURLData) {
     return;
   }
 
+  if (requestURLData.pathname === "/api/articles") {
+    const dataArticles = await readJSON(ARTICLES_DATA_PATH);
+    response.statusCode = 200;
+    response.end(JSON.stringify(dataArticles));
+    return;
+  } else if (requestURLData.pathname === "/api/articles-categories") {
+    const dataArticlesCategories = await readJSON(ARTICLE_CATEGORIES_DATA_PATH);
+    response.statusCode = 200;
+    response.end(JSON.stringify(dataArticlesCategories));
+    return;
+  } else if (requestURLData.pathname === "/api/header") {
+    const dataHeader = await readJSON(HEADER_DATA_PATH);
+    response.statusCode = 200;
+    response.end(JSON.stringify(dataHeader));
+    return;
+  } else if (requestURLData.pathname === "/api/footer") {
+    const dataFooter = await readJSON(FOOTER_DATA_PATH);
+    response.statusCode = 200;
+    response.end(JSON.stringify(dataFooter));
+    return;
+  }
+
   let templatePath = `src/template${requestURLData.pathname}`;
   const basenameURL = path.basename(requestURLData.pathname);
 
