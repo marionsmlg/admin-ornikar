@@ -1,0 +1,24 @@
+{% extends "src/components/_layout.njk" %}
+{% import "src/components/_button.njk" as button %}
+
+{% block section %}
+    <div class="w-full pt-10 pl-20 pr-20 ">
+
+        {% for article in articles %}
+            <div class="flex flex-col pt-0.5">
+                <div class="box-border p-4 border-2 border-gray-500 rounded-md">
+
+                    <h2>{{ article.title }}</h2>
+                    <p>{{ article.categoryId }}</p>
+                    <p>{{articleCategories}}</p>
+
+                </div>
+            </div>
+        {% endfor %}
+        <div class="pt-5">
+            <a href="/articles" class="text-blue-600">
+            Voir tous les articles
+          </a>
+        </div>
+    {% endblock %}
+</div>

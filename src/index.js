@@ -1,6 +1,6 @@
 import http from "http";
 import nunjucks from "nunjucks";
-import { formatDate } from "./utils.js";
+import { formatDate, getCategoryNameById } from "./utils.js";
 import { handlePOST } from "./handlePOST.js";
 import { handleGET } from "./handleGET.js";
 
@@ -9,7 +9,7 @@ let env = nunjucks.configure({
 });
 
 env.addFilter("formatDate", formatDate);
-
+env.addFilter("getCategoryNameById", getCategoryNameById);
 const PORT = 3000;
 
 const server = http.createServer(async (request, response) => {

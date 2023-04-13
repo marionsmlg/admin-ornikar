@@ -98,13 +98,7 @@ export function render404(response) {
 }
 
 export async function addArticle(dataToAdd) {
-  const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
-  );
-  const articleCategory = dataArticlesCategories.find(
-    (articleCategory) => articleCategory.name === dataToAdd.category
-  );
-  dataToAdd.categoryId = articleCategory.id;
+  dataToAdd.categoryId = dataToAdd.categoryId;
   dataToAdd.id = nanoid();
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
@@ -114,18 +108,12 @@ export async function addArticle(dataToAdd) {
   return data;
 }
 
-export async function editArticle(jsonData, indexData) {
-  const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
-  );
-  const articleCategory = dataArticlesCategories.find(
-    (articleCategory) => articleCategory.name === jsonData.category
-  );
+export async function editArticle(jsonData, articleId) {
   const data = await readJSON("src/data/articles.json");
-  const dataArticle = data[indexData];
-  dataArticle.categoryId = articleCategory.id;
+  const indexToModify = data.findIndex((article) => article.id === articleId);
+  const dataArticle = data[indexToModify];
+  dataArticle.categoryId = jsonData.categoryId;
   dataArticle.title = jsonData.title;
-  dataArticle.category = jsonData.category;
   dataArticle.img = jsonData.img;
   dataArticle.content = jsonData.content;
   dataArticle.updatedAt = new Date().toISOString();
@@ -136,9 +124,12 @@ export async function editArticle(jsonData, indexData) {
   return data;
 }
 
-export async function deleteArticle(indexToDelete) {
+export async function deleteArticle(jsonData) {
   const data = await readJSON("src/data/articles.json");
-  data.splice(indexToDelete, 1);
+  const indexArticleToDelete = data.findIndex(
+    (article) => article.id === jsonData.id
+  );
+  data.splice(indexArticleToDelete, 1);
 
   await writeJSON("src/data/articles.json", data);
   return data;
@@ -200,8 +191,8 @@ export async function editLinkInNavbar(jsonData) {
   const dataNavbar = data.navlinks;
 
   for (let i = 0; i < dataNavbar.length; i++) {
-    dataNavbar[i].title = jsonData[`title${i}`];
-    dataNavbar[i].href = jsonData[`href${i}`];
+    dataNavbar[i].title = jsonData[`title_${i}`];
+    dataNavbar[i].href = jsonData[`href_${i}`];
   }
 
   await writeJSON("src/data/header.json", data);
@@ -239,8 +230,8 @@ export async function editLinkInFooter(jsonData) {
   const footerLinks = data.footerLinks;
 
   for (let i = 0; i < footerLinks.length; i++) {
-    footerLinks[i].title = jsonData[`title${i}`];
-    footerLinks[i].href = jsonData[`href${i}`];
+    footerLinks[i].title = jsonData[`title_${i}`];
+    footerLinks[i].href = jsonData[`href_${i}`];
   }
 
   await writeJSON("src/data/footer.json", data);
@@ -252,7 +243,7 @@ export async function editSocialMediaInFooter(jsonData) {
   const footerSocialMedia = data.footerSocialMedia;
 
   for (let i = 0; i < footerSocialMedia.length; i++) {
-    footerSocialMedia[i].href = jsonData[`href${i}`];
+    footerSocialMedia[i].href = jsonData[`href_${i}`];
   }
 
   await writeJSON("src/data/footer.json", data);
@@ -266,15 +257,18 @@ export async function addArticleCategory(dataToAdd) {
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
   dataToAdd.id = nanoid();
-  data.unshift(dataToAdd);
+  dataArticlesCategories.unshift(dataToAdd);
   await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
-  return data;
+  return dataArticlesCategories;
 }
 
-export async function deleteArticleCategory(indexToDelete) {
+export async function deleteArticleCategory(jsonData) {
   const data = await readJSON("src/data/articleCategories.json");
+  const indexArticleCategoryToDelete = data.findIndex(
+    (category) => category.id === jsonData.id
+  );
 
-  data.splice(indexToDelete, 1);
+  data.splice(indexArticleCategoryToDelete, 1);
 
   await writeJSON("src/data/articleCategories.json", data);
   return data;
@@ -286,7 +280,7 @@ export async function editArticleCategory(jsonData) {
   );
 
   for (let i = 0; i < dataArticlesCategories.length; i++) {
-    dataArticlesCategories[i].name = jsonData[`name${i}`];
+    dataArticlesCategories[i].name = jsonData[`name_${i}`];
     dataArticlesCategories[i].updatedAt = new Date().toISOString();
   }
 
@@ -294,41 +288,9 @@ export async function editArticleCategory(jsonData) {
   return dataArticlesCategories;
 }
 
-// export async function editArticleCategory(jsonData) {
-//   const dataArticlesCategories = await readJSON(
-//     "src/data/articleCategories.json"
-//   );
-//   const dataArticles = await readJSON("src/data/articles.json");
-
-//   for (let i = 0; i < dataArticlesCategories.length; i++) {
-//     dataArticlesCategories[i].name = jsonData[`name${i}`];
-//     dataArticlesCategories[i].updatedAt = new Date().toISOString();
-//     const articleCategory = dataArticlesCategories.find(
-//       (articleCategory) => articleCategory.name === jsonData[`name${i}`]
-//     );
-//     const articleID = articleCategory.id;
-//     for (const article of dataArticles) {
-//       if (article.categoryId === articleID) {
-//         article.category = articleCategory.name;
-//         await writeJSON("src/data/articles.json", dataArticles);
-//       }
-//     }
-//   }
-//   await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
-//   return dataArticlesCategories;
-// }
-
-export async function editCategoriesinArticles() {
-  const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
+export function getCategoryNameById(id, dataArticlesCategories) {
+  const articleCategory = dataArticlesCategories.find(
+    (category) => category.id === id
   );
-  const dataArticles = await readJSON("src/data/articles.json");
-  for (let article of dataArticles) {
-    for (let category of dataArticlesCategories) {
-      if (article.categoryId === category.id) {
-        article.category = category.name;
-      }
-    }
-  }
-  await writeJSON("src/data/articles.json", dataArticles);
+  return articleCategory.name;
 }

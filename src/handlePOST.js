@@ -15,34 +15,25 @@ import {
   addArticleCategory,
   deleteArticleCategory,
   editArticleCategory,
-  editCategoriesinArticles,
 } from "./utils.js";
 import path from "path";
-
-const ARTICLES_DATA_PATH = "src/data/articles.json";
 
 export async function handlePOST(request, response, requestURLData) {
   const body = await readBody(request);
   const form = convertFormDataToJSON(body);
-
-  const articles = await readJSON(ARTICLES_DATA_PATH);
   const basenameURL = path.basename(requestURLData.pathname);
-  const indexToModify = articles.findIndex(
-    (article) => article.id === basenameURL
-  );
 
-  const indexToDelete = form.index;
   console.log({ form });
   if (
     requestURLData.pathname === `/articles/${basenameURL}` &&
     requestURLData.pathname !== "/articles/create"
   ) {
-    await editArticle(form, indexToModify);
+    await editArticle(form, basenameURL);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?editSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/article/delete") {
-    await deleteArticle(indexToDelete);
+    await deleteArticle(form);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?deleteSuccess=true`);
     response.end();
@@ -87,22 +78,21 @@ export async function handlePOST(request, response, requestURLData) {
     response.statusCode = 302;
     response.setHeader("Location", `/footer?editSuccess=true`);
     response.end();
-  } else if (requestURLData.pathname === "/articles/categories/add") {
-    console.log({ form });
+  } else if (requestURLData.pathname === "/article-category/add") {
     await addArticleCategory(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?createSuccess=true`);
     response.end();
-  } else if (requestURLData.pathname === "/articles/categories/delete") {
-    await deleteArticleCategory(indexToDelete);
+  } else if (requestURLData.pathname === "/article-category/delete") {
+    console.log({ form });
+    await deleteArticleCategory(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?deleteSuccess=true`);
     response.end();
-  } else if (requestURLData.pathname === "/articles/categories/edit") {
+  } else if (requestURLData.pathname === "/article-category/edit") {
     await editArticleCategory(form);
-    // await editCategoriesinArticles();
     response.statusCode = 302;
-    response.setHeader("Location", `/categories?createSuccess=true`);
+    response.setHeader("Location", `/categories?editSuccess=true`);
     response.end();
   } else {
     render404(response);

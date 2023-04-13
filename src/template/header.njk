@@ -14,7 +14,7 @@
             <div class="flex mt-6 items-center justify-between">
                 <h2 class="text-md font-semibold">Liens de la barre de navigation</h2>
                 <div>
-                    {{button.primaryButton("Sauvegarder",{"type":"submit"})}}
+                    {{button.primary("Sauvegarder",{"type":"submit"})}}
                 </div>
             </div>
             {% for navbarElement in dataNavbar%}
@@ -22,21 +22,21 @@
                 <div class="flex">
                     <div class="flex flex-col mt-4 mr-4">
                         {% if i === 0 %}
-                            <label for="title{{i}}}" class="pb-2 font-semibold">Titre</label>
+                            <label for="title" class="pb-2 font-semibold">Titre</label>
                         {% endif %}
-                        <textarea require id="title" name="title{{i}}" rows="1" class="resize-none mt-1 block w-96 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{navbarElement.title}}</textarea>
+                        <input require id="title" value="{{navbarElement.title}}" name="title_{{i}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
                     </div>
                     <div class="flex flex-col mt-4 ml-16">
                         {% if i === 0 %}
-                            <label for="href{{i}}}" class="pb-2 font-semibold">Lien</label>
+                            <label for="href" class="pb-2 font-semibold">Lien</label>
                         {% endif %}
-                        <textarea  require id="href" name="href{{i}}" rows="1" class="w-96 resize-none mt-1 block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6">{{navbarElement.href}}</textarea>
+                        <input require id="href" value="{{navbarElement.href}}" name="href_{{i}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
                     </div>
                 </div>
             {% endfor %}
         </form>
 
-        <h2 class="text-md pb-4 font-semibold mt-16">Ajouter un lien</h2>
+        {# <h2 class="text-md pb-4 font-semibold mt-16">Ajouter un lien</h2>
         <form action="/header/link/add" method="POST" >
             <div class="flex items-end">
                 <div class="flex flex-col">
@@ -48,11 +48,10 @@
                     <input required name="href" id="href" class="py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
                 </div>
                 <div  class="ml-4">
-                    {{button.primaryButton("Ajouter",{"type":"submit"})}}
+                    {{button.primary("Ajouter",{"type":"submit"})}}
                 </div>
             </div>
-
-        </form>
+        </form> #}
     </main>
 
 {% endblock %}

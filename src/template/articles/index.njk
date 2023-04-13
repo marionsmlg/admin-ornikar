@@ -1,5 +1,7 @@
 {% extends "src/components/_layout.njk" %}
 {% import "src/components/_button.njk" as button %}
+{% import "src/components/_icon.njk" as icon %}
+
 {% block titlePage %}
     <title>Articles</title>
 {% endblock %}
@@ -37,7 +39,7 @@
             <h1 class="text-2xl  font-semibold ">Articles ({{totalArticles}})</h1>
 
             <a href="/articles/create">
-                {{button.primaryButton ("+ Nouveau")}}
+                {{button.primary("+ Nouveau")}}
             </a>
 
         </div>
@@ -51,7 +53,6 @@
         <div class="border border-black rounded-md">
 
             {% for article in articles.slice(startIndex, endIndex) %}
-                {% set i = loop.index0 %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
@@ -59,7 +60,7 @@
                     </div>
                     <div class="w-full pl-4">
                         <h3 class="text-base font-semibold flex">{{article.title}}</h3>
-                        <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.category }}</p>
+                        <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.categoryId | getCategoryNameById(articleCategories)}}</p>
 
                         <div class="flex mt-2 justify-between items-center">
                             <div>
@@ -73,18 +74,18 @@
                             <div class="text-sm">
                                 {% if article.status === "published" %}
                                     <a target="_blank" href="">
-                                        {{button.primaryButton("<span>Publié</span>" + button.iconOpenTab())}}
+                                        {{button.primary("<span>Publié</span>" + icon.openTab())}}
                                     </a>
                                 {% else %}
                                     <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mr-2">Brouillon</p>
                                 {% endif %}
 
                                 <a href="/articles/{{article.id}}">
-                                    {{button.primaryButton("Editer")}}
+                                    {{button.primary("Editer")}}
                                 </a>
                                 <form class="inline-flex" action="/article/delete" method="POST">
-                                    <input type="hidden" name="index" value="{{i}}"/>
-                                    {{button.primaryButton("Supprimer",{"type": "submit"})}}
+                                    <input type="hidden" name="id" value="{{article.id}}"/>
+                                    {{button.primary("Supprimer",{"type": "submit"})}}
                                 </form>
                             </div>
                         </div>
@@ -97,13 +98,13 @@
         <div class="flex py-10 justify-between">
             {% if currentPage > 1 %}
                 <a href="/articles?page={{ currentPage - 1 }}">
-                    {{button.primaryButton ("Page précédente",{"type": "submit"})}}
+                    {{button.primary("Page précédente",{"type": "submit"})}}
                 </a>
             {% endif %}
             <p class="flex">Page {{currentPage}}/{{totalPages}}</p>
             {% if currentPage < totalPages %}
                 <a href="/articles?page={{ currentPage + 1}}">
-                    {{button.primaryButton ("Page suivante",{"type": "submit"})}}
+                    {{button.primary("Page suivante",{"type": "submit"})}}
                 </a>
             {% endif %}
 
