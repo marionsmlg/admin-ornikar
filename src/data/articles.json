@@ -189,7 +189,8 @@
     "img": "https://picsum.photos/300/200?dwyat1l7p9",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "jnp4ccw2dh",
@@ -254,7 +255,8 @@
     "img": "https://picsum.photos/300/200?rjmacbn74k",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "gdsqyl073r"
   },
   {
     "id": "dx9ffg0dxv",
@@ -385,7 +387,8 @@
     "img": "https://picsum.photos/300/200?sgpg6xuzgi",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "gno40y3ivl"
   },
   {
     "id": "477s383uk9",
@@ -450,7 +453,8 @@
     "img": "https://picsum.photos/300/200?306m1opp1m",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "wqx2s9w3r1",
@@ -460,7 +464,8 @@
     "img": "https://picsum.photos/300/200?wqx2s9w3r1",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "ej9news75f",
@@ -481,7 +486,8 @@
     "img": "https://picsum.photos/300/200?81py0ep11l",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "jb2teciwnj",
@@ -491,7 +497,8 @@
     "img": "https://picsum.photos/300/200?jb2teciwnj",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "nngxzlfcev",
@@ -501,7 +508,8 @@
     "img": "https://picsum.photos/300/200?nngxzlfcev",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "ut3cuid0xe"
   },
   {
     "id": "77oa08o4xc",
@@ -698,7 +706,8 @@
     "img": "https://picsum.photos/300/200?xcva1fvpin",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "jq1m72hs50"
   },
   {
     "id": "c3suud6pyb",
@@ -939,7 +948,8 @@
     "img": "https://picsum.photos/300/200?lhf7ep3ay5",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "jq1m72hs50"
   },
   {
     "id": "oyj3wtrh4h",
@@ -971,7 +981,8 @@
     "img": "https://picsum.photos/300/200?ifjcjppy6x",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "jq1m72hs50"
   },
   {
     "id": "ts2kx6rgif",
@@ -1069,6 +1080,7 @@
     "img": "https://picsum.photos/300/200?sg39zksmm4",
     "createdAt": "2023-03-23T15:47:25.968Z",
     "updatedAt": "",
-    "status": "published"
+    "status": "published",
+    "categoryId": "jq1m72hs50"
   }
 ]
