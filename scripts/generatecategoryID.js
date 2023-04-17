@@ -1,6 +1,6 @@
 export async function addCategoryIdToJSON() {
   const articles = await readJSON("src/data/articles.json");
-  const categories = await readJSON("src/data/articleCategories.json");
+  const categories = await readJSON("src/data/articles-categories.json");
   for (let article of articles) {
     for (let category of categories) {
       if (article.category === category.name) {
@@ -25,7 +25,7 @@ await removeCategory();
 
 // export async function editArticleCategory(jsonData) {
 //   const dataArticlesCategories = await readJSON(
-//     "src/data/articleCategories.json"
+//     "src/data/articles-categories.json"
 //   );
 //   const dataArticles = await readJSON("src/data/articles.json");
 
@@ -43,13 +43,13 @@ await removeCategory();
 //       }
 //     }
 //   }
-//   await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
+//   await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
 //   return dataArticlesCategories;
 // }
 
 export async function editCategoriesinArticles() {
   const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
+    "src/data/articles-categories.json"
   );
   const dataArticles = await readJSON("src/data/articles.json");
   for (let article of dataArticles) {
@@ -61,3 +61,24 @@ export async function editCategoriesinArticles() {
   }
   await writeJSON("src/data/articles.json", dataArticles);
 }
+
+export async function generateId() {
+  const users = await readJSON("src/data/users.json");
+
+  for (let user of users) {
+    user.id = nanoid();
+  }
+  await writeJSON("src/data/users.json", users);
+}
+
+export async function generatePassewordHash() {
+  const users = await readJSON("src/data/users.json");
+
+  for (let user of users) {
+    user.password = await argon2.hash(user.password);
+  }
+  await writeJSON("src/data/users.json", users);
+  return users;
+}
+
+// console.log(await generatePassewordHash());

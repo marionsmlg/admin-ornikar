@@ -15,8 +15,11 @@ import {
   addArticleCategory,
   deleteArticleCategory,
   editArticleCategory,
+  getSessionId,
+  removeSessionId,
 } from "./utils.js";
 import path from "path";
+import cookie from "cookie";
 
 export async function handlePOST(request, response, requestURLData) {
   const body = await readBody(request);
@@ -38,7 +41,14 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/articles?deleteSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/login") {
+    console.log(await identifiersAreValid(form));
     if (await identifiersAreValid(form)) {
+      const sessionId = await getSessionId(form);
+      response.setHeader(
+        "Set-Cookie",
+        `sessionId=${sessionId}; HttpOnly; Max-Age=(3600*7);Path=/`
+      );
+      console.log(request.headers.cookie);
       response.statusCode = 302;
       response.setHeader("Location", `/`);
       response.end();
@@ -47,8 +57,15 @@ export async function handlePOST(request, response, requestURLData) {
       response.setHeader("Location", `/login?loginFailed=true`);
       response.end();
     }
+  } else if (requestURLData.pathname === "/logout") {
+    const cookieLogin = cookie.parse(request.headers.cookie || "");
+    const sessionId = cookieLogin.sessionId;
+    await removeSessionId(sessionId);
+    response.statusCode = 302;
+    response.setHeader("Set-Cookie", `sessionId=; HttpOnly; Max-Age=0;Path=/`);
+    response.setHeader("Location", `/login`);
+    response.end();
   } else if (requestURLData.pathname === "/articles/create") {
-    console.log(form);
     await addArticle(form);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?createSuccess=true`);
@@ -84,7 +101,6 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/categories?createSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/article-category/delete") {
-    console.log({ form });
     await deleteArticleCategory(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?deleteSuccess=true`);

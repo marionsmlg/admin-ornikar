@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import { customAlphabet } from "nanoid";
 import nunjucks from "nunjucks";
+import slugify from "@sindresorhus/slugify";
+import argon2 from "argon2";
 
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
 
@@ -161,7 +163,7 @@ export async function identifiersAreValid(inputIdentifiers) {
     return false;
   } else if (
     user.email === inputIdentifiers.email &&
-    user.password === inputIdentifiers.password
+    (await argon2.verify(user.password, inputIdentifiers.password))
   ) {
     return true;
   } else {
@@ -252,31 +254,31 @@ export async function editSocialMediaInFooter(jsonData) {
 
 export async function addArticleCategory(dataToAdd) {
   const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
+    "src/data/articles-categories.json"
   );
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
   dataToAdd.id = nanoid();
   dataArticlesCategories.unshift(dataToAdd);
-  await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
+  await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
   return dataArticlesCategories;
 }
 
 export async function deleteArticleCategory(jsonData) {
-  const data = await readJSON("src/data/articleCategories.json");
+  const data = await readJSON("src/data/articles-categories.json");
   const indexArticleCategoryToDelete = data.findIndex(
     (category) => category.id === jsonData.id
   );
 
   data.splice(indexArticleCategoryToDelete, 1);
 
-  await writeJSON("src/data/articleCategories.json", data);
+  await writeJSON("src/data/articles-categories.json", data);
   return data;
 }
 
 export async function editArticleCategory(jsonData) {
   const dataArticlesCategories = await readJSON(
-    "src/data/articleCategories.json"
+    "src/data/articles-categories.json"
   );
 
   for (let i = 0; i < dataArticlesCategories.length; i++) {
@@ -284,7 +286,7 @@ export async function editArticleCategory(jsonData) {
     dataArticlesCategories[i].updatedAt = new Date().toISOString();
   }
 
-  await writeJSON("src/data/articleCategories.json", dataArticlesCategories);
+  await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
   return dataArticlesCategories;
 }
 
@@ -293,4 +295,42 @@ export function getCategoryNameById(id, dataArticlesCategories) {
     (category) => category.id === id
   );
   return articleCategory.name;
+}
+
+export function createArticleSlug(title, id) {
+  const slug = `${slugify(title)}-${id}`;
+  return slug;
+}
+
+export async function getSessionId(inputIdentifiers) {
+  const arrOfUsers = await readJSON(USERS_DATA_PATH);
+  const user = arrOfUsers.find((user) => user.email === inputIdentifiers.email);
+  const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 20);
+  const sessionId = (user.sessionId = nanoid());
+  await writeJSON(USERS_DATA_PATH, arrOfUsers);
+  return sessionId;
+}
+
+export async function removeSessionId(sessionId) {
+  const arrOfUsers = await readJSON(USERS_DATA_PATH);
+  const user = arrOfUsers.find((user) => user.sessionId === sessionId);
+  delete user.sessionId;
+  await writeJSON(USERS_DATA_PATH, arrOfUsers);
+  return arrOfUsers;
+}
+
+export async function hasSessionId(sessionId) {
+  if (sessionId) {
+    const users = await readJSON(USERS_DATA_PATH);
+    return !!users.find((user) => user.sessionId === sessionId);
+  } else {
+    return false;
+  }
+}
+export async function getUserEmail(sessionId) {
+  if (sessionId) {
+    const users = await readJSON(USERS_DATA_PATH);
+    const user = users.find((user) => user.sessionId === sessionId);
+    return user.email;
+  }
 }

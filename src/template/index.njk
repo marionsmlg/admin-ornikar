@@ -54,7 +54,7 @@
 
                             <div class="text-sm">
                                 {% if article.status === "published" %}
-                                    <a target="_blank" href="">
+                                    <a target="_blank" href="https://ornikar-dynamique.vercel.app/blog/{{article.title | createArticleSlug(article.id)}}.html">
                                         {{button.primary("<span>Publié</span>" + icon.openTab())}}
                                     </a>
                                 {% else %}

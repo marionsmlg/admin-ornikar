@@ -1,8 +1,18 @@
 [
   {
     "email": "marion.schimmmerling2@hotmail.fr",
-    "password": "marion"
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$8A4hgvu4KMXBrU3Ms3zCYQ$SaEBuA+S7lVlzaxoZRCdscRoRSTyHne3/IpTjgk8OOc",
+    "id": "vuqv83hazz",
+    "sessionId": "2oft6j1grie86ckenq7t"
   },
-  { "email": "zenalba@gmail.com", "password": "psytrance" },
-  { "email": "mathieu@gmail.com", "password": "pig" }
+  {
+    "email": "zenalba@gmail.com",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$3pPZJyq3YiH6kjBtggVa2g$iqCf5mZWeOk6/IsQhHd3kB4XPe3DBrvf4Le5DzrrbKE",
+    "id": "rkst3bzojp"
+  },
+  {
+    "email": "mathieu@gmail.com",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$qdLW8vqUwj2hh2Kf4BrhVA$PYWO5d8ZKXLzubWQIQo648Wh/A+LqQWSmMnp417z+GA",
+    "id": "xmsaaiclue"
+  }
 ]
