@@ -2,7 +2,8 @@
   {
     "email": "marion.schimmmerling2@hotmail.fr",
     "password": "$argon2id$v=19$m=65536,t=3,p=4$8A4hgvu4KMXBrU3Ms3zCYQ$SaEBuA+S7lVlzaxoZRCdscRoRSTyHne3/IpTjgk8OOc",
-    "id": "vuqv83hazz"
+    "id": "vuqv83hazz",
+    "sessionId": "i4khp18tyv8lw2spl4sv"
   },
   {
     "email": "zenalba@gmail.com",
@@ -12,7 +13,6 @@
   {
     "email": "mathieu@gmail.com",
     "password": "$argon2id$v=19$m=65536,t=3,p=4$qdLW8vqUwj2hh2Kf4BrhVA$PYWO5d8ZKXLzubWQIQo648Wh/A+LqQWSmMnp417z+GA",
-    "id": "xmsaaiclue",
-    "sessionId": "bpgduocpcpqt1wukfxuz"
+    "id": "xmsaaiclue"
   }
 ]
