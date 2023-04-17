@@ -50,50 +50,6 @@ export async function handleGET(request, response, requestURLData) {
     }
   }
 
-  // if (requestURLData.pathname === "/api/articles") {
-  //   if (authorizationApi !== secret) {
-  //     response.status = 403;
-  //     response.end("Forbidden");
-  //     return;
-  //   }
-  //   const dataArticles = await readJSON(ARTICLES_DATA_PATH);
-  //   response.statusCode = 200;
-  //   response.end(JSON.stringify(dataArticles));
-  //   return;
-  // } else if (requestURLData.pathname === "/api/articles-categories") {
-  //   if (authorizationApi !== secret) {
-  //     response.status = 403;
-  //     response.end("Forbidden");
-  //     return;
-  //   }
-  //   const dataArticlesCategories = await readJSON(
-  //     ARTICLE_CATEGORIES_DATA_PATH
-  //   );
-  //   response.statusCode = 200;
-  //   response.end(JSON.stringify(dataArticlesCategories));
-  //   return;
-  // } else if (requestURLData.pathname === "/api/header") {
-  //   if (authorizationApi !== secret) {
-  //     response.status = 403;
-  //     response.end("Forbidden");
-  //     return;
-  //   }
-  //   const dataHeader = await readJSON(HEADER_DATA_PATH);
-  //   response.statusCode = 200;
-  //   response.end(JSON.stringify(dataHeader));
-  //   return;
-  // } else if (requestURLData.pathname === "/api/footer") {
-  //   if (authorizationApi !== secret) {
-  //     response.status = 403;
-  //     response.end("Forbidden");
-  //     return;
-  //   }
-  //   const dataFooter = await readJSON(FOOTER_DATA_PATH);
-  //   response.statusCode = 200;
-  //   response.end(JSON.stringify(dataFooter));
-  //   return;
-  // }
-
   if (requestURLData.pathname !== `/login`) {
     const cookieLogin = cookie.parse(request.headers.cookie || "");
     const sessionId = cookieLogin.sessionId;

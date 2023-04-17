@@ -1,24 +1,30 @@
-{% extends "src/components/_layout.njk" %}
-{% import "src/components/_button.njk" as button %}
-
-{% block section %}
-    <div class="w-full pt-10 pl-20 pr-20 ">
-
-        {% for article in articles %}
-            <div class="flex flex-col pt-0.5">
-                <div class="box-border p-4 border-2 border-gray-500 rounded-md">
-
-                    <h2>{{ article.title }}</h2>
-                    <p>{{ article.categoryId }}</p>
-                    <p>{{articleCategories}}</p>
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Navigation Verticale</title>
+        <link rel="stylesheet" href="https://unpkg.com/tailwindcss@latest/dist/tailwind.min.css"/>
+    </head>
+    <body>
+        <div class="flex flex-row">
+            <div class="bg-blue-500 h-screen w-16 flex flex-col justify-start items-center">
+                <ul class="list-none m-0 p-0">
+                    <li>
+                        <a href="#" class="block p-4 text-white font-bold hover:bg-blue-600">Marion</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block p-4 text-white font-bold hover:bg-blue-600">Mathieu</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block p-4 text-white font-bold hover:bg-blue-600">Papa</a>
+                    </li>
+                </ul>
+                <div class="mt-auto">
+                    <a href="#" class="block p-4 text-white font-bold hover:bg-blue-600">Schimmerling</a>
                 </div>
             </div>
-        {% endfor %}
-        <div class="pt-5">
-            <a href="/articles" class="text-blue-600">
-            Voir tous les articles
-          </a>
+            <div class="flex-1">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed aliquet velit, in efficitur sapien. Maecenas at augue sed lacus gravida tincidunt a eget lorem. Nam vitae enim nisi. Vestibulum hendrerit feugiat quam a euismod. Suspendisse potenti. Sed euismod massa in orci imperdiet, eget varius tortor feugiat. Integer posuere malesuada metus vitae lobortis. In hac habitasse platea dictumst.</p>
+            </div>
         </div>
-    {% endblock %}
-</div>
+    </body>
+</html>

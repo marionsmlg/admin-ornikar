@@ -332,7 +332,7 @@ export async function getUserEmail(sessionId) {
     const users = await readJSON(USERS_DATA_PATH);
     const user = users.find((user) => user.sessionId === sessionId);
     if (user === undefined) {
-      return false;
+      return "";
     } else {
       return user.email;
     }

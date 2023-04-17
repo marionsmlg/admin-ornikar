@@ -12,7 +12,7 @@
     </head>
 
     <body class="flex">
-        <nav class="flex flex-col bg-[#6758c5] w-56 h-screen fixed items-stretch">
+        <nav class="flex flex-col bg-[#6758c5] w-56 h-screen fixed">
             <a class="text-gray-300 font-medium py-3 mb-4 px-4 hover:text-white hover:bg-[#4c34e0] block rounded-md" href="/">ADMIN</a>
 
             <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/articles">Articles</a>
@@ -20,11 +20,11 @@
             <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/homepage">Homepage</a>
             <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/header">Header</a>
             <a class="text-gray-300 hover:bg-[#4c34e0] hover:text-white block rounded-md px-4 py-2 text-base font-medium" href="/footer">Footer</a>
-            <div class="flex flex-col self-end">
-                <form method="POST" action="/logout">
-                    {{button.primary(icon.logout(),{"type":"submit"})}}
+            <div class="flex flex-col mt-auto mb-4">
+                <p class="break-all text-gray-300 flex rounded-md px-4 py-2 text-sm font-medium items-center">{{icon.user()}}{{userEmail}}</p>
+                <form method="POST" action="/logout" class="px-2 py-2">
+                    {{button.primary(icon.logout() +"<span>Se déconnecter</span>",{"type":"submit"})}}
                 </form>
-                <p class="break-all text-gray-300 flex rounded-md px-4 py-2 text-base font-medium">{{userEmail}}</p>
             </div>
         </nav>
 
