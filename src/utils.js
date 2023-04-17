@@ -331,6 +331,10 @@ export async function getUserEmail(sessionId) {
   if (sessionId) {
     const users = await readJSON(USERS_DATA_PATH);
     const user = users.find((user) => user.sessionId === sessionId);
-    return user.email;
+    if (user === undefined) {
+      return false;
+    } else {
+      return user.email;
+    }
   }
 }
