@@ -19,14 +19,19 @@ const ARTICLES_DATA_PATH = "src/data/articles.json";
 
 export async function handleGET(request, response, requestURLData) {
   if (path.extname(requestURLData.pathname) !== "") {
+    if (path.extname(requestURLData.pathname) === ".js") {
+      const jsFilePath = `src/js${requestURLData.pathname}`;
+      await renderFilePath(response, jsFilePath);
+      return;
+    }
     const assetsFilePath = `src/assets${requestURLData.pathname}`;
-    console.log({ assetsFilePath });
     await renderFilePath(response, assetsFilePath);
     return;
   }
+
   const secret = "HaB>`[kP=3JNN),T";
   const authorizationApi = request.headers.authorization;
-  const apiPaths = [
+  const dataApi = [
     { path: "/api/articles", dataJsonPath: ARTICLES_DATA_PATH },
     {
       path: "/api/articles-categories",
@@ -36,7 +41,7 @@ export async function handleGET(request, response, requestURLData) {
     { path: "/api/footer", dataJsonPath: FOOTER_DATA_PATH },
   ];
 
-  for (const api of apiPaths) {
+  for (const api of dataApi) {
     if (requestURLData.pathname === api.path) {
       if (authorizationApi !== secret) {
         response.status = 403;

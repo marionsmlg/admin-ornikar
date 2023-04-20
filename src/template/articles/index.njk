@@ -5,6 +5,9 @@
 {% block titlePage %}
     <title>Articles</title>
 {% endblock %}
+{% block jsFile %}
+    <script src="delete-article.js"></script>
+{% endblock %}
 
 {% block section %}
 
@@ -53,13 +56,14 @@
         <div class="border border-black rounded-md">
 
             {% for article in articles.slice(startIndex, endIndex) %}
+                {% set i = loop.index0 %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
                         <img src="{{article.img}}"/>
                     </div>
                     <div class="w-full pl-4">
-                        <h3 class="text-base font-semibold flex">{{article.title}}</h3>
+                        <h3 id="article-title-{{i}}" class="text-base font-semibold flex">{{article.title}}</h3>
                         <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.categoryId | getCategoryNameById(articleCategories)}}</p>
 
                         <div class="flex mt-2 justify-between items-center">
@@ -83,17 +87,22 @@
                                 <a href="/articles/{{article.id}}">
                                     {{button.primary("Editer")}}
                                 </a>
-                                <form class="inline-flex" action="/article/delete" method="POST">
+                                <form class="inline-flex" action="/article/delete" method="POST" id="deleteArticle_{{i}}">
                                     <input type="hidden" name="id" value="{{article.id}}"/>
-                                    {{button.primary("Supprimer",{"type": "submit"})}}
                                 </form>
+
+                                {{button.primary("Supprimer",{"type": "button", "id": "deleteArticleButton", "data-modal-is-open":"false"})}}
+
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             {% endfor %}
         </div>
+
+        {% include "src/template/delete-article-modal.njk" %}
 
         <div class="flex py-10 justify-between">
             {% if currentPage > 1 %}

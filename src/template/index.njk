@@ -5,6 +5,9 @@
 {% block titlePage %}
     <title>Tableau de bord</title>
 {% endblock %}
+{% block jsFile %}
+    <script src="delete-article.js"></script>
+{% endblock %}
 
 {% block section %}
 
@@ -34,6 +37,7 @@
         <h2 class="text-lg font-semibold  pt-8 pb-2">3 derniers articles</h2>
         <div class="border border-black rounded-md">
             {% for article in highlightArticles %}
+                {% include "src/template/delete-article-modal.njk" %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
@@ -63,10 +67,7 @@
                                 <a href="/articles/{{article.id}}">
                                     {{ button.primary("Editer") }}
                                 </a>
-                                <form class="inline-flex" action="/article/delete" method="POST">
-                                    <input type="hidden" name="id" value="{{article.id}}"/>
-                                    {{ button.primary("Supprimer",{"type": "submit"}) }}
-                                </form>
+                                {{button.primary("Supprimer",{"type": "button", "id": "deleteArticleButton", "data-modal-is-open":"false"})}}
                             </div>
 
                         </div>
