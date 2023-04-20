@@ -3,16 +3,19 @@
     "email": "marion.schimmmerling2@hotmail.fr",
     "password": "$argon2id$v=19$m=65536,t=3,p=4$8A4hgvu4KMXBrU3Ms3zCYQ$SaEBuA+S7lVlzaxoZRCdscRoRSTyHne3/IpTjgk8OOc",
     "id": "vuqv83hazz",
-    "sessionId": "skx9w6qacqnw42g1u15m"
+    "createdAt": "2023-04-20T13:12:37.177Z",
+    "sessionId": "4g5m0maxm0b7kfabk81p"
   },
   {
     "email": "zenalba@gmail.com",
     "password": "$argon2id$v=19$m=65536,t=3,p=4$3pPZJyq3YiH6kjBtggVa2g$iqCf5mZWeOk6/IsQhHd3kB4XPe3DBrvf4Le5DzrrbKE",
-    "id": "rkst3bzojp"
+    "id": "rkst3bzojp",
+    "createdAt": "2023-04-20T13:12:37.177Z"
   },
   {
     "email": "mathieu@gmail.com",
     "password": "$argon2id$v=19$m=65536,t=3,p=4$qdLW8vqUwj2hh2Kf4BrhVA$PYWO5d8ZKXLzubWQIQo648Wh/A+LqQWSmMnp417z+GA",
-    "id": "xmsaaiclue"
+    "id": "xmsaaiclue",
+    "createdAt": "2023-04-20T13:12:37.177Z"
   }
 ]

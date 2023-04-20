@@ -55,7 +55,10 @@ export async function handleGET(request, response, requestURLData) {
     }
   }
 
-  if (requestURLData.pathname !== `/login`) {
+  if (
+    requestURLData.pathname !== `/login` &&
+    requestURLData.pathname !== `/sign-up`
+  ) {
     const cookieLogin = cookie.parse(request.headers.cookie || "");
     const sessionId = cookieLogin.sessionId;
     if (!(await hasSessionId(sessionId))) {

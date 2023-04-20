@@ -100,18 +100,20 @@ export function render404(response) {
   response.end(html);
 }
 
-export async function addArticle(dataToAdd) {
+export async function addArticle(dataToAdd, sessionId) {
   dataToAdd.categoryId = dataToAdd.categoryId;
   dataToAdd.id = nanoid();
   dataToAdd.createdAt = new Date().toISOString();
   dataToAdd.updatedAt = "";
+  dataToAdd.created_by = await getUserId(sessionId);
+  dataToAdd.updated_by = "";
   const data = await readJSON("src/data/articles.json");
   data.unshift(dataToAdd);
   await writeJSON("src/data/articles.json", data);
   return data;
 }
 
-export async function editArticle(jsonData, articleId) {
+export async function editArticle(jsonData, articleId, sessionId) {
   const data = await readJSON("src/data/articles.json");
   const indexToModify = data.findIndex((article) => article.id === articleId);
   const dataArticle = data[indexToModify];
@@ -122,6 +124,7 @@ export async function editArticle(jsonData, articleId) {
   dataArticle.updatedAt = new Date().toISOString();
   dataArticle.status = jsonData.status;
   dataArticle.description = jsonData.description;
+  dataArticle.updated_by = await getUserId(sessionId);
 
   await writeJSON("src/data/articles.json", data);
   return data;
@@ -338,4 +341,32 @@ export async function getUserEmail(sessionId) {
       return user.email;
     }
   }
+}
+export async function getUserId(sessionId) {
+  if (sessionId) {
+    const users = await readJSON(USERS_DATA_PATH);
+    const user = users.find((user) => user.sessionId === sessionId);
+    if (user === undefined) {
+      return "";
+    } else {
+      return user.id;
+    }
+  }
+}
+
+export async function addNewUser(dataToAdd) {
+  delete dataToAdd.confirmPassword;
+  const data = await readJSON("src/data/users.json");
+  dataToAdd.id = nanoid();
+  dataToAdd.password = await argon2.hash(dataToAdd.password);
+  dataToAdd.createdAt = new Date().toISOString();
+  data.unshift(dataToAdd);
+  await writeJSON("src/data/users.json", data);
+  return data;
+}
+
+export async function userExists(dataToAdd) {
+  const users = await readJSON("src/data/users.json");
+  const user = users.find((user) => user.email === dataToAdd.email);
+  return Boolean(user);
 }

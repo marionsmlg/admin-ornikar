@@ -17,6 +17,8 @@ import {
   editArticleCategory,
   getSessionId,
   removeSessionId,
+  addNewUser,
+  userExists,
 } from "./utils.js";
 import path from "path";
 import cookie from "cookie";
@@ -26,12 +28,15 @@ export async function handlePOST(request, response, requestURLData) {
   const form = convertFormDataToJSON(body);
   const basenameURL = path.basename(requestURLData.pathname);
 
+  const cookieLogin = cookie.parse(request.headers.cookie || "");
+  const sessionId = cookieLogin.sessionId;
+
   console.log({ form });
   if (
     requestURLData.pathname === `/articles/${basenameURL}` &&
     requestURLData.pathname !== "/articles/create"
   ) {
-    await editArticle(form, basenameURL);
+    await editArticle(form, basenameURL, sessionId);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?editSuccess=true`);
     response.end();
@@ -41,14 +46,12 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/articles?deleteSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/login") {
-    console.log(await identifiersAreValid(form));
     if (await identifiersAreValid(form)) {
       const sessionId = await getSessionId(form);
       response.setHeader(
         "Set-Cookie",
         `sessionId=${sessionId}; HttpOnly; Max-Age=(3600*7);Path=/`
       );
-      console.log(request.headers.cookie);
       response.statusCode = 302;
       response.setHeader("Location", `/`);
       response.end();
@@ -66,7 +69,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/login`);
     response.end();
   } else if (requestURLData.pathname === "/articles/create") {
-    await addArticle(form);
+    await addArticle(form, sessionId);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?createSuccess=true`);
     response.end();
@@ -110,6 +113,17 @@ export async function handlePOST(request, response, requestURLData) {
     response.statusCode = 302;
     response.setHeader("Location", `/categories?editSuccess=true`);
     response.end();
+  } else if (requestURLData.pathname === "/sign-up") {
+    if (!(await userExists(form))) {
+      await addNewUser(form);
+      response.statusCode = 302;
+      response.setHeader("Location", `/login`);
+      response.end();
+    } else {
+      response.statusCode = 302;
+      response.setHeader("Location", `/sign-up?signUpFailed=true`);
+      response.end();
+    }
   } else {
     render404(response);
   }
