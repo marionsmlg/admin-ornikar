@@ -1,43 +1,30 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const arrOfIddeleteButtton = document.querySelectorAll(
-    "#deleteArticleButton"
+  const arrOfdeleteButtton = document.getElementsByClassName(
+    "js-delete-article-button"
   );
-  for (let i = 0; i < arrOfIddeleteButtton.length; i++) {
-    const deleteButton = arrOfIddeleteButtton[i];
+  for (const deleteButton of arrOfdeleteButtton) {
     const cancelButton = document.getElementById("cancel-button");
-    const confirmDeleteButton = document.getElementById(
-      "confirm-delete-button"
-    );
+
     const modalTitle = document.getElementById("modal-title");
-    const articleTitle = document.getElementById(`article-title-${i}`);
     const modal = document.getElementById("delete-article-modal");
-    const modalBlock = document.getElementById("modal-block");
+
+    const articleId = deleteButton.dataset.articleId;
+    const deleteArticleInput = document.getElementById("delete-article-input");
     deleteButton.addEventListener("click", () => {
-      if (deleteButton.dataset.modalIsOpen === "false") {
-        openModal();
-      }
+      modal.style.display = "flex";
+      modalTitle.innerText = deleteButton.dataset.articleTitle;
+      deleteArticleInput.setAttribute("value", `${articleId}`);
     });
 
     cancelButton.addEventListener("click", () => {
       modal.style.display = "none";
     });
 
-    function openModal() {
-      modal.style.display = "flex";
-      modalTitle.innerText = `"${articleTitle.innerText}"`;
-      confirmDeleteButton.setAttribute("form", `deleteArticle_${i}`);
-      deleteButton.dataset.modalIsOpen === "true";
-    }
-
     // window.addEventListener("click", function (event) {
+    //   const modalBlock = document.getElementById("modal-block");
     //   if (event.target === modalBlock) {
     //     modal.style.display = "none";
     //   }
     // });
-
-    // function closeModal() {
-    //   modal.style.display = "none";
-    //   deleteButton.dataset.modalIsOpen === "false";
-    // }
   }
 });

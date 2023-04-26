@@ -11,6 +11,7 @@ import {
 import path from "path";
 import nunjucks from "nunjucks";
 import cookie from "cookie";
+import "dotenv/config";
 
 const ARTICLE_CATEGORIES_DATA_PATH = "src/data/articles-categories.json";
 const FOOTER_DATA_PATH = "src/data/footer.json";
@@ -29,7 +30,7 @@ export async function handleGET(request, response, requestURLData) {
     return;
   }
 
-  const secret = "HaB>`[kP=3JNN),T";
+  const ORNIKAR_ADMIN_API_KEY = process.env.ORNIKAR_ADMIN_API_KEY;
   const authorizationApi = request.headers.authorization;
   const dataApi = [
     { path: "/api/articles", dataJsonPath: ARTICLES_DATA_PATH },
@@ -43,7 +44,7 @@ export async function handleGET(request, response, requestURLData) {
 
   for (const api of dataApi) {
     if (requestURLData.pathname === api.path) {
-      if (authorizationApi !== secret) {
+      if (authorizationApi !== ORNIKAR_ADMIN_API_KEY) {
         response.status = 403;
         response.end("Forbidden");
         return;
@@ -64,6 +65,15 @@ export async function handleGET(request, response, requestURLData) {
     if (!(await hasSessionId(sessionId))) {
       response.statusCode = 302;
       response.setHeader("Location", `/login`);
+      response.end();
+      return;
+    }
+  } else {
+    const cookieLogin = cookie.parse(request.headers.cookie || "");
+    const sessionId = cookieLogin.sessionId;
+    if (await hasSessionId(sessionId)) {
+      response.statusCode = 302;
+      response.setHeader("Location", `/`);
       response.end();
       return;
     }

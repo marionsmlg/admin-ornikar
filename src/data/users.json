@@ -1,10 +1,16 @@
 [
   {
-    "email": "marion.schimmmerling2@hotmail.fr",
-    "password": "$argon2id$v=19$m=65536,t=3,p=4$8A4hgvu4KMXBrU3Ms3zCYQ$SaEBuA+S7lVlzaxoZRCdscRoRSTyHne3/IpTjgk8OOc",
+    "email": "marion.schimmerling2@hotmail.fr",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$7j29Q25g3HaSXaPIv8aSCw$bIdqVJai/t/1613INHo9M9mqxdWev3GwusGEIBGiQ10",
     "id": "vuqv83hazz",
-    "createdAt": "2023-04-20T13:12:37.177Z",
-    "sessionId": "4g5m0maxm0b7kfabk81p"
+    "createdAt": "2023-04-21T14:18:54.967Z",
+    "sessionId": "wg2zp29a6a66gf9afsyt"
+  },
+  {
+    "email": "vip-mari@live.fr",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$ua2d5F7uvXESGkI7TJWQuA$ZP1LoBsD7MXJgVLKDR2iDEWfuY1iIttcm0Ar5PS7v1o",
+    "id": "llszzftruz",
+    "createdAt": "2023-04-21T12:55:45.451Z"
   },
   {
     "email": "zenalba@gmail.com",
