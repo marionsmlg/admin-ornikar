@@ -2,3 +2,4 @@ node_modules
 archive
 test.js
 save.js
+.env
