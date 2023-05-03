@@ -22,6 +22,8 @@ import {
 } from "./utils.js";
 import path from "path";
 import cookie from "cookie";
+import { customAlphabet } from "nanoid";
+const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 20);
 
 export async function handlePOST(request, response, requestURLData) {
   const body = await readBody(request);
@@ -47,6 +49,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.end();
   } else if (requestURLData.pathname === "/login") {
     if (await identifiersAreValid(form)) {
+      // const sessionId = nanoid();
       const sessionId = await getSessionId(form);
       response.setHeader(
         "Set-Cookie",

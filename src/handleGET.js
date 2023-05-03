@@ -22,6 +22,7 @@ export async function handleGET(request, response, requestURLData) {
   if (path.extname(requestURLData.pathname) !== "") {
     if (path.extname(requestURLData.pathname) === ".js") {
       const jsFilePath = `src/js${requestURLData.pathname}`;
+      response.setHeader("Content-Type", "application/javascript");
       await renderFilePath(response, jsFilePath);
       return;
     }
