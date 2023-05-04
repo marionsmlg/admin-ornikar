@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor
       .save()
       .then((outputData) => {
-        console.log("Article data :", outputData);
+        const edjsParser = edjsHTML();
+        let result = edjsParser.parse(outputData).join("\n");
+        console.log("Article data :", result);
       })
       .catch((error) => {
         console.log("Saving failed:", error);
