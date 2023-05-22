@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const inputArticleContent = document.getElementById("article-content");
+  const initialData = inputArticleContent.value;
   const editor = new EditorJS({
     autofocus: true,
     holder: "editorjs",
@@ -23,24 +25,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
     },
     paragraph: { class: Paragraph },
+
+    onReady: async () => {
+      await editor.blocks.renderFromHTML(initialData);
+    },
   });
 
-  const createArticleButton = document.getElementById("create-article-btn");
-  const createArticleForm = document.getElementById("create-article-form");
-  const inputContent = document.createElement("input");
-  inputContent.setAttribute("type", "hidden");
-  inputContent.setAttribute("name", "content");
-  createArticleForm.appendChild(inputContent);
-
-  createArticleButton.addEventListener("click", function (event) {
+  const saveArticleButton = document.getElementById("save-article-btn");
+  const editArticleForm = document.getElementById("edit-article-form");
+  saveArticleButton.addEventListener("click", function (event) {
     event.preventDefault();
 
     editor.save().then((outputData) => {
       const edjsParser = edjsHTML();
       let result = edjsParser.parse(outputData).join("\n");
-      inputContent.setAttribute("value", `${result}`);
+      inputArticleContent.value = result;
 
-      createArticleForm.submit();
+      editArticleForm.submit();
     });
   });
 });

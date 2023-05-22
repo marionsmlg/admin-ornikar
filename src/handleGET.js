@@ -12,6 +12,7 @@ import path from "path";
 import nunjucks from "nunjucks";
 import cookie from "cookie";
 import "dotenv/config";
+import { fetchDataFromTable } from "./utils-database.js";
 
 const ARTICLE_CATEGORIES_DATA_PATH = "src/data/articles-categories.json";
 const FOOTER_DATA_PATH = "src/data/footer.json";
@@ -21,7 +22,8 @@ const ARTICLES_DATA_PATH = "src/data/articles.json";
 export async function handleGET(request, response, requestURLData) {
   if (path.extname(requestURLData.pathname) !== "") {
     if (path.extname(requestURLData.pathname) === ".js") {
-      const jsFilePath = `src/js${requestURLData.pathname}`;
+      const fileName = path.basename(requestURLData.pathname);
+      const jsFilePath = `src/js/${fileName}`;
       response.setHeader("Content-Type", "application/javascript");
       await renderFilePath(response, jsFilePath);
       return;

@@ -4,7 +4,7 @@ import { customAlphabet } from "nanoid";
 import nunjucks from "nunjucks";
 import slugify from "@sindresorhus/slugify";
 import argon2 from "argon2";
-
+import { z } from "zod";
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
 
 const ARTICLES_DATA_PATH = "src/data/articles.json";
@@ -364,4 +364,38 @@ export async function userExists(dataToAdd) {
   const users = await readJSON("src/data/users.json");
   const user = users.find((user) => user.email === dataToAdd.email);
   return Boolean(user);
+}
+
+export function dataUserAreValid(user) {
+  const UserSchema = z.object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(8)
+      .max(100)
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/),
+    confirmPassword: z
+      .string()
+      .min(8)
+      .max(100)
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/),
+  });
+  return UserSchema.safeParse(user).success;
+}
+
+export function dataArticleAreValid(articleData) {
+  const articleSchema = z.object({
+    title: z.string().min(5).max(100),
+    img: z.string().url(),
+    content: z.string().min(100),
+  });
+  return articleSchema.safeParse(articleData).success;
+}
+
+export function dataCategoryIsValid(data) {
+  const categorySchema = z.object({
+    name: z.string().min(3).max(50),
+  });
+
+  return categorySchema.safeParse(data).success;
 }
