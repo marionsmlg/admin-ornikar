@@ -12,8 +12,8 @@ async function insertArticle() {
   await db.tx(async (db) => {
     for (const article of articles) {
       await db.query(sql`
-  INSERT INTO article (title, category_id, status, img, content, id, created_at, updated_at, created_by, updated_by)
-    VALUES (${article.title}, ${article.categoryId}, ${article.status}, ${article.img}, ${article.content}, ${article.id}, ${article.createdAt}, ${article.updatedAt}, ${article.created_by}, ${article.updated_by});
+  INSERT INTO article (title, category_id, status, img, content, created_by, updated_by)
+    VALUES (${article.title}, ${article.categoryId}, ${article.status}, ${article.img}, ${article.content}, ${article.created_by}, ${article.updated_by});
     `);
     }
   });
@@ -26,8 +26,8 @@ async function insertArticlesCategories() {
   await db.tx(async (db) => {
     for (const article of articlesCategories) {
       await db.query(sql`
-  INSERT INTO article_category (name, created_at, updated_at, id)
-    VALUES (${article.name}, ${article.createdAt}, ${article.updatedAt}, ${article.id});
+  INSERT INTO article_category (name)
+    VALUES (${article.name});
     `);
     }
   });
@@ -38,8 +38,8 @@ async function insertUsers() {
   await db.tx(async (db) => {
     for (const user of data) {
       await db.query(sql`
-  INSERT INTO "user" (email, password, created_at, session_id, id)
-    VALUES (${user.email}, ${user.password}, ${user.createdAt}, ${user.sessionId}, ${user.id});
+  INSERT INTO "user" (email, password,session_id)
+    VALUES (${user.email}, ${user.password}, ${user.sessionId});
     `);
     }
   });
@@ -51,8 +51,34 @@ async function insertFooter() {
   await db.tx(async (db) => {
     for (const item of data) {
       await db.query(sql`
-  INSERT INTO "footer_social_media" (id, name, href)
-    VALUES (${item.id}, ${item.name}, ${item.href});
+  INSERT INTO "footer_social_media" (name, href)
+    VALUES (${item.name}, ${item.href});
+    `);
+    }
+  });
+}
+
+async function insertFooterLinks() {
+  const json = await readJSON("src/data/footer.json");
+  const data = json.footerLinks;
+  await db.tx(async (db) => {
+    for (const item of data) {
+      await db.query(sql`
+  INSERT INTO "footer_link" (title, href)
+    VALUES (${item.title}, ${item.href});
+    `);
+    }
+  });
+}
+
+async function insertHeader() {
+  const json = await readJSON("src/data/header.json");
+  const data = json.navlinks;
+  await db.tx(async (db) => {
+    for (const item of data) {
+      await db.query(sql`
+  INSERT INTO "header_link" (title, href)
+    VALUES (${item.title}, ${item.href});
     `);
     }
   });
@@ -64,12 +90,11 @@ async function getArticles() {
   `);
   return articles;
 }
-// async function run() {
-//   console.log(await getArticles());
-//   await db.dispose();
-// }
+async function run() {
+  await insertHeader(), await db.dispose();
+}
 
-// run().catch((err) => {
-//   console.error(err);
-//   process.exit(1);
-// });
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

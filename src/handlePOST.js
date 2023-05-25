@@ -1,32 +1,31 @@
+import { convertFormDataToJSON, readBody, render404 } from "./utils.js";
 import {
-  convertFormDataToJSON,
-  readBody,
-  readJSON,
-  render404,
+  addArticle,
   editArticle,
   deleteArticle,
-  identifiersAreValid,
-  addArticle,
-  addLinkInNavbar,
-  addLinkInFooter,
-  editLinkInNavbar,
-  editLinkInFooter,
-  editSocialMediaInFooter,
   addArticleCategory,
   deleteArticleCategory,
   editArticleCategory,
+  dataArticleAreValid,
+  dataCategoryIsValid,
+} from "./features/articles.js";
+import {
+  identifiersAreValid,
   getSessionId,
   removeSessionId,
   addNewUser,
   userExists,
   dataUserAreValid,
-  dataArticleAreValid,
-  dataCategoryIsValid,
-} from "./utils.js";
+} from "./features/users.js";
+import {
+  addLinkInNavbar,
+  addLinkInFooter,
+  editLinkInNavbar,
+  editLinkInFooter,
+  editSocialMediaInFooter,
+} from "./features/global.js";
 import path from "path";
 import cookie from "cookie";
-import { customAlphabet } from "nanoid";
-const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 20);
 
 export async function handlePOST(request, response, requestURLData) {
   const body = await readBody(request);

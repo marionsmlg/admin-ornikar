@@ -1,6 +1,7 @@
 import http from "http";
 import nunjucks from "nunjucks";
-import { formatDate, getCategoryNameById, createArticleSlug } from "./utils.js";
+import { formatDate, createArticleSlug } from "./utils.js";
+import { getCategoryNameById } from "./features/articles.js";
 import { handlePOST } from "./handlePOST.js";
 import { handleGET } from "./handleGET.js";
 

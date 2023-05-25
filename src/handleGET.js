@@ -1,13 +1,6 @@
-import {
-  isDir,
-  isFile,
-  readJSON,
-  render404,
-  articleIDExists,
-  renderFilePath,
-  hasSessionId,
-  getUserEmail,
-} from "./utils.js";
+import { isDir, isFile, readJSON, render404, renderFilePath } from "./utils.js";
+import { articleIDExists } from "./features/articles.js";
+import { hasSessionId, getUserEmail } from "./features/users.js";
 import path from "path";
 import nunjucks from "nunjucks";
 import cookie from "cookie";
