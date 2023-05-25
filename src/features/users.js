@@ -4,7 +4,6 @@ import argon2 from "argon2";
 import { z } from "zod";
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
 
-const ARTICLES_DATA_PATH = "src/data/articles.json";
 const USERS_DATA_PATH = "src/data/users.json";
 
 export async function identifiersAreValid(inputIdentifiers) {

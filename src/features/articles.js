@@ -1,6 +1,8 @@
 import { readJSON, writeJSON } from "../utils.js";
 import { customAlphabet } from "nanoid";
+import { getUserId } from "./users.js";
 import { z } from "zod";
+import db from "../utils.js";
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
 
 const ARTICLES_DATA_PATH = "src/data/articles.json";
@@ -117,3 +119,25 @@ export function dataCategoryIsValid(data) {
 
   return categorySchema.safeParse(data).success;
 }
+
+export async function fetchDataFromTable(tableName) {
+  const data = await db(tableName).select("*");
+  await db.destroy();
+  return data;
+}
+
+async function addFormData(form) {
+  // form.categoryId = form.categoryId;
+  // form.id = nanoid();
+  // form.createdAt = new Date().toISOString();
+  // form.updatedAt = "";
+  // form.created_by = await getUserId(sessionId);
+  // form.updated_by = "";
+  await db.transaction(async (trx) => {
+    await trx("article").insert(form);
+    await trx.commit();
+    await db.destroy();
+  });
+}
+
+// await addFormData(form);

@@ -5,7 +5,6 @@ import path from "path";
 import nunjucks from "nunjucks";
 import cookie from "cookie";
 import "dotenv/config";
-import { fetchDataFromTable } from "./utils-database.js";
 
 const ARTICLE_CATEGORIES_DATA_PATH = "src/data/articles-categories.json";
 const FOOTER_DATA_PATH = "src/data/footer.json";

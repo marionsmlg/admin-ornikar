@@ -5,7 +5,7 @@ import { readJSON } from "./utils.js";
 const db = createConnectionPool({
   bigIntMode: "number",
 });
-export default db;
+// export default db;
 
 async function insertArticle() {
   const articles = await readJSON("src/data/articles.json");
