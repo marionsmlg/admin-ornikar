@@ -1,86 +1,80 @@
 import { readJSON, writeJSON } from "../utils.js";
 import { customAlphabet } from "nanoid";
-import { getUserId } from "./users.js";
+import { sessionId, user } from "./users.js";
 import { z } from "zod";
-import db from "../utils.js";
+import db from "../utils-database.js";
+import { fetchDataFromTable } from "../utils-database.js";
+
 const nanoid = customAlphabet("0123456789qwertyuiopasdfghjklzxcvbnm", 10);
 
-const ARTICLES_DATA_PATH = "src/data/articles.json";
+///////////////////////////// CRUD WITH JSON////////////////////////////////////////////////////
 
-export async function addArticle(dataToAdd, sessionId) {
-  dataToAdd.categoryId = dataToAdd.categoryId;
-  dataToAdd.id = nanoid();
-  dataToAdd.createdAt = new Date().toISOString();
-  dataToAdd.updatedAt = "";
-  dataToAdd.created_by = await getUserId(sessionId);
-  dataToAdd.updated_by = "";
-  const data = await readJSON("src/data/articles.json");
-  data.unshift(dataToAdd);
-  await writeJSON("src/data/articles.json", data);
-  return data;
-}
+// const ARTICLES_DATA_PATH = "src/data/articles.json";
 
-export async function editArticle(jsonData, articleId, sessionId) {
-  const data = await readJSON("src/data/articles.json");
-  const indexToModify = data.findIndex((article) => article.id === articleId);
-  const dataArticle = data[indexToModify];
-  dataArticle.categoryId = jsonData.categoryId;
-  dataArticle.title = jsonData.title;
-  dataArticle.img = jsonData.img;
-  dataArticle.content = jsonData.content;
-  dataArticle.updatedAt = new Date().toISOString();
-  dataArticle.status = jsonData.status;
-  dataArticle.description = jsonData.description;
-  dataArticle.updated_by = await getUserId(sessionId);
+// export async function addArticle(dataToAdd, sessionId) {
+//   dataToAdd.categoryId = dataToAdd.categoryId;
+//   dataToAdd.id = nanoid();
+//   dataToAdd.createdAt = new Date().toISOString();
+//   dataToAdd.updatedAt = "";
+//   dataToAdd.created_by = await getUserId(sessionId);
+//   dataToAdd.updated_by = "";
+//   const data = await readJSON("src/data/articles.json");
+//   data.unshift(dataToAdd);
+//   await writeJSON("src/data/articles.json", data);
+//   return data;
+// }
 
-  await writeJSON("src/data/articles.json", data);
-  return data;
-}
+// export async function editArticle(jsonData, articleId, sessionId) {
+//   const data = await readJSON("src/data/articles.json");
+//   const indexToModify = data.findIndex((article) => article.id === articleId);
+//   const dataArticle = data[indexToModify];
+//   dataArticle.categoryId = jsonData.categoryId;
+//   dataArticle.title = jsonData.title;
+//   dataArticle.img = jsonData.img;
+//   dataArticle.content = jsonData.content;
+//   dataArticle.updatedAt = new Date().toISOString();
+//   dataArticle.status = jsonData.status;
+//   dataArticle.description = jsonData.description;
+//   dataArticle.updated_by = await getUserId(sessionId);
 
-export async function deleteArticle(jsonData) {
-  const data = await readJSON("src/data/articles.json");
-  const indexArticleToDelete = data.findIndex(
-    (article) => article.id === jsonData.id
-  );
-  data.splice(indexArticleToDelete, 1);
+//   await writeJSON("src/data/articles.json", data);
+//   return data;
+// }
 
-  await writeJSON("src/data/articles.json", data);
-  return data;
-}
+// export async function deleteArticle(jsonData) {
+//   const data = await readJSON("src/data/articles.json");
+//   const indexArticleToDelete = data.findIndex(
+//     (article) => article.id === jsonData.id
+//   );
+//   data.splice(indexArticleToDelete, 1);
 
-export async function articleIDExists(id) {
-  const articles = await readJSON(ARTICLES_DATA_PATH);
-  const article = articles.find((article) => article.id === id);
-  if (article === undefined) {
-    return false;
-  } else {
-    return true;
-  }
-}
+//   await writeJSON("src/data/articles.json", data);
+//   return data;
+// }
 
-export async function addArticleCategory(dataToAdd) {
-  const dataArticlesCategories = await readJSON(
-    "src/data/articles-categories.json"
-  );
-  dataToAdd.createdAt = new Date().toISOString();
-  dataToAdd.updatedAt = "";
-  dataToAdd.id = nanoid();
-  dataArticlesCategories.unshift(dataToAdd);
-  await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
-  return dataArticlesCategories;
-}
+// export async function addArticleCategory(dataToAdd) {
+//   const dataArticlesCategories = await readJSON(
+//     "src/data/articles-categories.json"
+//   );
+//   dataToAdd.createdAt = new Date().toISOString();
+//   dataToAdd.updatedAt = "";
+//   dataToAdd.id = nanoid();
+//   dataArticlesCategories.unshift(dataToAdd);
+//   await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
+//   return dataArticlesCategories;
+// }
 
-export async function deleteArticleCategory(jsonData) {
-  const data = await readJSON("src/data/articles-categories.json");
-  const indexArticleCategoryToDelete = data.findIndex(
-    (category) => category.id === jsonData.id
-  );
+// export async function deleteArticleCategory(jsonData) {
+//   const data = await readJSON("src/data/articles-categories.json");
+//   const indexArticleCategoryToDelete = data.findIndex(
+//     (category) => category.id === jsonData.id
+//   );
 
-  data.splice(indexArticleCategoryToDelete, 1);
+//   data.splice(indexArticleCategoryToDelete, 1);
 
-  await writeJSON("src/data/articles-categories.json", data);
-  return data;
-}
+//   await writeJSON("src/data/articles-categories.json", data);
+//   return data;
+// }
 
 export async function editArticleCategory(jsonData) {
   const dataArticlesCategories = await readJSON(
@@ -94,6 +88,13 @@ export async function editArticleCategory(jsonData) {
 
   await writeJSON("src/data/articles-categories.json", dataArticlesCategories);
   return dataArticlesCategories;
+}
+//////////////////////////////CRUD WITH DATABASE/////////////////////////////////////////////////////////////
+
+export async function articleIDExists(id) {
+  const articles = await fetchDataFromTable("article");
+  const article = articles.find((article) => article.id === id);
+  return Boolean(article);
 }
 
 export function getCategoryNameById(id, dataArticlesCategories) {
@@ -120,24 +121,86 @@ export function dataCategoryIsValid(data) {
   return categorySchema.safeParse(data).success;
 }
 
-export async function fetchDataFromTable(tableName) {
-  const data = await db(tableName).select("*");
-  await db.destroy();
-  return data;
-}
+export const article = {
+  add: async function (form, sessionId) {
+    form.created_by = await user.getId(sessionId);
+    const trx = await db.transaction();
+    try {
+      await trx("article").insert(form);
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
 
-async function addFormData(form) {
-  // form.categoryId = form.categoryId;
-  // form.id = nanoid();
-  // form.createdAt = new Date().toISOString();
-  // form.updatedAt = "";
-  // form.created_by = await getUserId(sessionId);
-  // form.updated_by = "";
-  await db.transaction(async (trx) => {
-    await trx("article").insert(form);
-    await trx.commit();
-    await db.destroy();
-  });
-}
+  update: async function (form, articleId, sessionId) {
+    form.updated_by = await user.getId(sessionId);
+    const trx = await db.transaction();
+    try {
+      await trx("article").where({ id: articleId }).update(form);
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
 
-// await addFormData(form);
+  delete: async function (articleId) {
+    const trx = await db.transaction();
+    try {
+      await trx("article").where(articleId).del();
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
+};
+
+export const articleCategory = {
+  add: async function (form) {
+    const trx = await db.transaction();
+    try {
+      await trx("article_category").insert(form);
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
+
+  update: async function (form) {
+    const trx = await db.transaction();
+    try {
+      await trx("article_category").where({ id: articleId }).update(form);
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
+
+  delete: async function (articleId) {
+    const trx = await db.transaction();
+    try {
+      await trx("article_category").where(articleId).del();
+      await trx.commit();
+    } catch (error) {
+      await trx.rollback();
+      throw error;
+    } finally {
+      await trx.destroy();
+    }
+  },
+};

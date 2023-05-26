@@ -2,20 +2,6 @@ import fs from "fs/promises";
 import { readFile } from "fs/promises";
 import nunjucks from "nunjucks";
 import slugify from "@sindresorhus/slugify";
-import knex from "knex";
-import "dotenv/config";
-
-const db = knex({
-  client: "pg",
-  connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-  },
-});
-
-export default db;
 
 export async function pathExists(path) {
   try {

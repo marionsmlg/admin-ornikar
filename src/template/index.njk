@@ -45,13 +45,13 @@
                     </div>
                     <div class="w-full pl-4">
                         <h3 class="text-base font-semibold flex">{{article.title}}</h3>
-                        <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.categoryId | getCategoryNameById(articleCategories)}}</p>
+                        <p class="text-sm text-white bg-[#6758c5] font-medium rounded-md inline-block px-2 py-0.5 mt-2">{{article.category_id | getCategoryNameById(articleCategories)}}</p>
 
                         <div class="flex mt-2 justify-between items-center">
                             <div>
                                 <p class="text-xs">
-                                    {% if article.updatedAt === "" %}Créé le {{article.createdAt | formatDate()}}
-                                    {% else %} Dernière modification le {{article.updatedAt| formatDate()}}
+                                    {% if article.updated_at === null %}Créé le {{article.created_at | formatDate()}}
+                                    {% else %} Dernière modification le {{article.updated_at| formatDate()}}
                                     {% endif %}
                                 </p>
                             </div>
@@ -67,7 +67,7 @@
                                 <a href="/articles/{{article.id}}">
                                     {{ button.primary("Editer") }}
                                 </a>
-                                {{button.primary("Supprimer","js-delete-article-button",{"type": "button","data-article-id":article.id, "data-article-title":article.title})}}
+                                {{button.primary("Supprimer",{"type": "button","data-article-id":article.id, "data-article-title":article.title},"js-delete-article-button")}}
                             </div>
 
                         </div>

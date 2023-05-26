@@ -1,15 +1,11 @@
 import { isDir, isFile, readJSON, render404, renderFilePath } from "./utils.js";
 import { articleIDExists } from "./features/articles.js";
-import { hasSessionId, getUserEmail } from "./features/users.js";
+import { hasSessionId, user } from "./features/users.js";
 import path from "path";
 import nunjucks from "nunjucks";
 import cookie from "cookie";
 import "dotenv/config";
-
-const ARTICLE_CATEGORIES_DATA_PATH = "src/data/articles-categories.json";
-const FOOTER_DATA_PATH = "src/data/footer.json";
-const HEADER_DATA_PATH = "src/data/header.json";
-const ARTICLES_DATA_PATH = "src/data/articles.json";
+import { fetchDataFromTable } from "./utils-database.js";
 
 export async function handleGET(request, response, requestURLData) {
   if (path.extname(requestURLData.pathname) !== "") {
@@ -28,13 +24,14 @@ export async function handleGET(request, response, requestURLData) {
   const ORNIKAR_ADMIN_API_KEY = process.env.ORNIKAR_ADMIN_API_KEY;
   const authorizationApi = request.headers.authorization;
   const dataApi = [
-    { path: "/api/articles", dataJsonPath: ARTICLES_DATA_PATH },
+    { path: "/api/articles", tableName: "article" },
     {
       path: "/api/articles-categories",
-      dataJsonPath: ARTICLE_CATEGORIES_DATA_PATH,
+      tableName: "article_category",
     },
-    { path: "/api/header", dataJsonPath: HEADER_DATA_PATH },
-    { path: "/api/footer", dataJsonPath: FOOTER_DATA_PATH },
+    { path: "/api/header-link", tableName: "header_link" },
+    { path: "/api/footer-link", tableName: "footer_link" },
+    { path: "/api/footer-social-media", tableName: "footer_social_media" },
   ];
 
   for (const api of dataApi) {
@@ -44,9 +41,9 @@ export async function handleGET(request, response, requestURLData) {
         response.end("Forbidden");
         return;
       }
-      const data = await readJSON(api.dataJsonPath);
+      const data = await fetchDataFromTable(api.tableName);
       response.statusCode = 200;
-      response.end(JSON.stringify(data));
+      response.end(data);
       return;
     }
   }
@@ -57,6 +54,7 @@ export async function handleGET(request, response, requestURLData) {
   ) {
     const cookieLogin = cookie.parse(request.headers.cookie || "");
     const sessionId = cookieLogin.sessionId;
+
     if (!(await hasSessionId(sessionId))) {
       response.statusCode = 302;
       response.setHeader("Location", `/login`);
@@ -92,11 +90,8 @@ export async function handleGET(request, response, requestURLData) {
   }
 
   const searchParams = Object.fromEntries(requestURLData.searchParams);
-  const articles = await readJSON(ARTICLES_DATA_PATH);
+  const articles = await fetchDataFromTable("article");
   const article = articles.find((article) => article.id === basenameURL);
-  const footerData = await readJSON(FOOTER_DATA_PATH);
-  const headerData = await readJSON(HEADER_DATA_PATH);
-
   const cookieLogin = cookie.parse(request.headers.cookie || "");
   const sessionId = cookieLogin.sessionId;
 
@@ -105,11 +100,11 @@ export async function handleGET(request, response, requestURLData) {
     highlightArticles: articles.slice(0, 3),
     articles: articles,
     article: article,
-    articleCategories: await readJSON(ARTICLE_CATEGORIES_DATA_PATH),
-    dataNavbar: headerData.navlinks,
-    footerLinks: footerData.footerLinks,
-    footerSocialMedia: footerData.footerSocialMedia,
-    userEmail: await getUserEmail(sessionId),
+    articleCategories: await fetchDataFromTable("article_category"),
+    dataNavbar: await fetchDataFromTable("header_link"),
+    footerLinks: await fetchDataFromTable("footer_link"),
+    footerSocialMedia: await fetchDataFromTable("footer_social_media"),
+    userEmail: await user.getEmail(sessionId),
   };
 
   const html = nunjucks.render(templatePath, templateData);

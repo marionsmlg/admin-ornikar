@@ -1,12 +1,5 @@
 import { readJSON, writeJSON } from "../utils.js";
 
-export async function addLinkInNavbar(dataToAdd) {
-  const data = await readJSON("src/data/header.json");
-  const navlinks = data.navlinks;
-  navlinks.unshift(dataToAdd);
-  await writeJSON("src/data/header.json", data);
-  return data;
-}
 export async function editLinkInNavbar(jsonData) {
   const data = await readJSON("src/data/header.json");
   const dataNavbar = data.navlinks;
@@ -17,32 +10,6 @@ export async function editLinkInNavbar(jsonData) {
   }
 
   await writeJSON("src/data/header.json", data);
-  return data;
-}
-
-export async function deleteLinkInNavbar(indexToDelete) {
-  const data = await readJSON("src/data/header.json");
-  const navlinks = data.navlinks;
-  navlinks.splice(indexToDelete, 1);
-
-  await writeJSON("src/data/header.json", data);
-  return data;
-}
-
-export async function addLinkInFooter(dataToAdd) {
-  const data = await readJSON("src/data/footer.json");
-  const footerLinks = data.footerLinks;
-  footerLinks.unshift(dataToAdd);
-  await writeJSON("src/data/footer.json", data);
-  return data;
-}
-
-export async function deleteLinkInFooter(indexToDelete) {
-  const data = await readJSON("src/data/footer.json");
-  const footerLinks = data.footerLinks;
-  footerLinks.splice(indexToDelete, 1);
-
-  await writeJSON("src/data/footer.json", data);
   return data;
 }
 

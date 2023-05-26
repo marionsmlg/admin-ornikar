@@ -1,31 +1,26 @@
 import { convertFormDataToJSON, readBody, render404 } from "./utils.js";
 import {
-  addArticle,
-  editArticle,
-  deleteArticle,
-  addArticleCategory,
-  deleteArticleCategory,
   editArticleCategory,
   dataArticleAreValid,
   dataCategoryIsValid,
+  article,
+  articleCategory,
 } from "./features/articles.js";
 import {
   identifiersAreValid,
-  getSessionId,
-  removeSessionId,
-  addNewUser,
   userExists,
   dataUserAreValid,
+  sessionId,
+  user,
 } from "./features/users.js";
 import {
-  addLinkInNavbar,
-  addLinkInFooter,
   editLinkInNavbar,
   editLinkInFooter,
   editSocialMediaInFooter,
 } from "./features/global.js";
 import path from "path";
 import cookie from "cookie";
+import { v4 as uuidv4 } from "uuid";
 
 export async function handlePOST(request, response, requestURLData) {
   const body = await readBody(request);
@@ -33,7 +28,7 @@ export async function handlePOST(request, response, requestURLData) {
   const basenameURL = path.basename(requestURLData.pathname);
 
   const cookieLogin = cookie.parse(request.headers.cookie || "");
-  const sessionId = cookieLogin.sessionId;
+  const sessionIdInCookie = cookieLogin.sessionId;
 
   console.log({ form });
   if (
@@ -41,7 +36,7 @@ export async function handlePOST(request, response, requestURLData) {
     requestURLData.pathname !== "/articles/create"
   ) {
     if (dataArticleAreValid(form)) {
-      await editArticle(form, basenameURL, sessionId);
+      await article.update(form, basenameURL, sessionIdInCookie);
       response.statusCode = 302;
       response.setHeader("Location", `/articles?editSuccess=true`);
       response.end();
@@ -54,16 +49,17 @@ export async function handlePOST(request, response, requestURLData) {
       response.end();
     }
   } else if (requestURLData.pathname === "/article/delete") {
-    await deleteArticle(form);
+    await article.delete(form);
     response.statusCode = 302;
     response.setHeader("Location", `/articles?deleteSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/login") {
     if (await identifiersAreValid(form)) {
-      const sessionId = await getSessionId(form);
+      const newSessionId = uuidv4();
+      await sessionId.add(form, newSessionId);
       response.setHeader(
         "Set-Cookie",
-        `sessionId=${sessionId}; HttpOnly; Max-Age=(3600*7);Path=/`
+        `sessionId=${newSessionId}; HttpOnly; Max-Age=(3600*7);Path=/`
       );
       response.statusCode = 302;
       response.setHeader("Location", `/`);
@@ -74,16 +70,14 @@ export async function handlePOST(request, response, requestURLData) {
       response.end();
     }
   } else if (requestURLData.pathname === "/logout") {
-    const cookieLogin = cookie.parse(request.headers.cookie || "");
-    const sessionId = cookieLogin.sessionId;
-    await removeSessionId(sessionId);
+    await sessionId.remove(sessionIdInCookie);
     response.statusCode = 302;
     response.setHeader("Set-Cookie", `sessionId=; HttpOnly; Max-Age=0;Path=/`);
     response.setHeader("Location", `/login`);
     response.end();
   } else if (requestURLData.pathname === "/articles/create") {
     if (dataArticleAreValid(form)) {
-      await addArticle(form, sessionId);
+      await article.add(form, sessionIdInCookie);
       response.statusCode = 302;
       response.setHeader("Location", `/articles?createSuccess=true`);
       response.end();
@@ -92,20 +86,10 @@ export async function handlePOST(request, response, requestURLData) {
       response.setHeader("Location", `/articles/create?createFailed=true`);
       response.end();
     }
-  } else if (requestURLData.pathname === "/header/link/add") {
-    await addLinkInNavbar(form);
-    response.statusCode = 302;
-    response.setHeader("Location", `/header?createSuccess=true`);
-    response.end();
   } else if (requestURLData.pathname === "/header/link/edit") {
     await editLinkInNavbar(form);
     response.statusCode = 302;
     response.setHeader("Location", `/header?editSuccess=true`);
-    response.end();
-  } else if (requestURLData.pathname === "/footer/link/add") {
-    await addLinkInFooter(form);
-    response.statusCode = 302;
-    response.setHeader("Location", `/footer?createSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/footer/link/edit") {
     await editLinkInFooter(form);
@@ -119,7 +103,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.end();
   } else if (requestURLData.pathname === "/article-category/add") {
     if (dataCategoryIsValid(form)) {
-      await addArticleCategory(form);
+      await articleCategory.add(form);
       response.statusCode = 302;
       response.setHeader("Location", `/categories?createSuccess=true`);
       response.end();
@@ -129,7 +113,7 @@ export async function handlePOST(request, response, requestURLData) {
       response.end();
     }
   } else if (requestURLData.pathname === "/article-category/delete") {
-    await deleteArticleCategory(form);
+    await articleCategory.delete(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?deleteSuccess=true`);
     response.end();
@@ -140,7 +124,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.end();
   } else if (requestURLData.pathname === "/sign-up") {
     if (!(await userExists(form)) && dataUserAreValid(form)) {
-      await addNewUser(form);
+      await user.add({ email: form.email, password: form.password });
       response.statusCode = 302;
       response.setHeader("Location", `/login`);
       response.end();

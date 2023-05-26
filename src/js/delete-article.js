@@ -19,12 +19,5 @@ window.addEventListener("DOMContentLoaded", () => {
     cancelButton.addEventListener("click", () => {
       modal.style.display = "none";
     });
-
-    // window.addEventListener("click", function (event) {
-    //   const modalBlock = document.getElementById("modal-block");
-    //   if (event.target === modalBlock) {
-    //     modal.style.display = "none";
-    //   }
-    // });
   }
 });
