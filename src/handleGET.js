@@ -43,7 +43,7 @@ export async function handleGET(request, response, requestURLData) {
       }
       const data = await fetchDataFromTable(api.tableName);
       response.statusCode = 200;
-      response.end(JSON.stringify(data));
+      response.end(data);
       return;
     }
   }
