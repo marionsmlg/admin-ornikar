@@ -21,32 +21,32 @@ export async function handleGET(request, response, requestURLData) {
     return;
   }
 
-  const ORNIKAR_ADMIN_API_KEY = process.env.ORNIKAR_ADMIN_API_KEY;
-  const authorizationApi = request.headers.authorization;
-  const dataApi = [
-    { path: "/api/articles", tableName: "article" },
-    {
-      path: "/api/articles-categories",
-      tableName: "article_category",
-    },
-    { path: "/api/header-link", tableName: "header_link" },
-    { path: "/api/footer-link", tableName: "footer_link" },
-    { path: "/api/footer-social-media", tableName: "footer_social_media" },
-  ];
+  // const ORNIKAR_ADMIN_API_KEY = process.env.ORNIKAR_ADMIN_API_KEY;
+  // const authorizationApi = request.headers.authorization;
+  // const dataApi = [
+  //   { path: "/api/articles", tableName: "article" },
+  //   {
+  //     path: "/api/articles-categories",
+  //     tableName: "article_category",
+  //   },
+  //   { path: "/api/header-link", tableName: "header_link" },
+  //   { path: "/api/footer-link", tableName: "footer_link" },
+  //   { path: "/api/footer-social-media", tableName: "footer_social_media" },
+  // ];
 
-  for (const api of dataApi) {
-    if (requestURLData.pathname === api.path) {
-      if (authorizationApi !== ORNIKAR_ADMIN_API_KEY) {
-        response.status = 403;
-        response.end("Forbidden");
-        return;
-      }
-      const data = await fetchDataFromTable(api.tableName);
-      response.statusCode = 200;
-      response.end(data);
-      return;
-    }
-  }
+  // for (const api of dataApi) {
+  //   if (requestURLData.pathname === api.path) {
+  //     if (authorizationApi !== ORNIKAR_ADMIN_API_KEY) {
+  //       response.status = 403;
+  //       response.end("Forbidden");
+  //       return;
+  //     }
+  //     const data = await fetchDataFromTable(api.tableName);
+  //     response.statusCode = 200;
+  //     response.end(data);
+  //     return;
+  //   }
+  // }
 
   if (
     requestURLData.pathname !== `/login` &&
