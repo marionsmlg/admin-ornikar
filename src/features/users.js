@@ -3,19 +3,6 @@ import { z } from "zod";
 import { fetchDataFromTable } from "../utils-database.js";
 import db from "../utils-database.js";
 
-// const USERS_DATA_PATH = "src/data/users.json";
-
-// async function addNewUser(dataToAdd) {
-//   delete form.confirmPassword;
-//   const data = await readJSON("src/data/users.json");
-//   dataToAdd.id = nanoid();
-//   dataToAdd.password = await argon2.hash(dataToAdd.password);
-//   dataToAdd.createdAt = new Date().toISOString();
-//   data.unshift(dataToAdd);
-//   await writeJSON("src/data/users.json", data);
-//   return data;
-// }
-
 export async function identifiersAreValid(inputIdentifiers) {
   const arrOfUsers = await fetchDataFromTable("user");
   const user = arrOfUsers.find((user) => user.email === inputIdentifiers.email);

@@ -1,6 +1,5 @@
 import { convertFormDataToJSON, readBody, render404 } from "./utils.js";
 import {
-  editArticleCategory,
   dataArticleAreValid,
   dataCategoryIsValid,
   article,
@@ -13,11 +12,7 @@ import {
   sessionId,
   user,
 } from "./features/users.js";
-import {
-  editLinkInNavbar,
-  editLinkInFooter,
-  editSocialMediaInFooter,
-} from "./features/global.js";
+import { update } from "./features/global.js";
 import path from "path";
 import cookie from "cookie";
 import { v4 as uuidv4 } from "uuid";
@@ -87,17 +82,17 @@ export async function handlePOST(request, response, requestURLData) {
       response.end();
     }
   } else if (requestURLData.pathname === "/header/link/edit") {
-    await editLinkInNavbar(form);
+    await update.headerOrFooterLink(form, "header_link");
     response.statusCode = 302;
     response.setHeader("Location", `/header?editSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/footer/link/edit") {
-    await editLinkInFooter(form);
+    await update.headerOrFooterLink(form, "footer_link");
     response.statusCode = 302;
     response.setHeader("Location", `/footer?editSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/footer/socialmedia/edit") {
-    await editSocialMediaInFooter(form);
+    await update.footerSocialMedia(form);
     response.statusCode = 302;
     response.setHeader("Location", `/footer?editSuccess=true`);
     response.end();
@@ -118,7 +113,7 @@ export async function handlePOST(request, response, requestURLData) {
     response.setHeader("Location", `/categories?deleteSuccess=true`);
     response.end();
   } else if (requestURLData.pathname === "/article-category/edit") {
-    await editArticleCategory(form);
+    await articleCategory.update(form);
     response.statusCode = 302;
     response.setHeader("Location", `/categories?editSuccess=true`);
     response.end();

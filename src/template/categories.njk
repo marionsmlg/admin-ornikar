@@ -36,7 +36,7 @@
         {% for articleCategory in articleCategories %}
             {% set i = loop.index0 %}
             <div class="flex mt-4">
-                <input form="editCategory" value="{{articleCategory.name}}" id="name" name="name_{{i}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
+                <input form="editCategory" value="{{articleCategory.name}}" id="name" name="{{articleCategory.id}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
 
                 <div  class="ml-4 flex items-center">
 

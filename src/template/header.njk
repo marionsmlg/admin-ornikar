@@ -24,13 +24,13 @@
                         {% if i === 0 %}
                             <label for="title" class="pb-2 font-semibold">Titre</label>
                         {% endif %}
-                        <input require id="title" value="{{navbarElement.title}}" name="title_{{i}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
+                        <input require id="title" value="{{navbarElement.title}}" name="title_{{navbarElement.id}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
                     </div>
                     <div class="flex flex-col mt-4 ml-16">
                         {% if i === 0 %}
                             <label for="href" class="pb-2 font-semibold">Lien</label>
                         {% endif %}
-                        <input require id="href" value="{{navbarElement.href}}" name="href_{{i}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
+                        <input require id="href" value="{{navbarElement.href}}" name="href_{{navbarElement.id}}" class="text-sm mr-0.5 py-1 w-80 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
                     </div>
                 </div>
             {% endfor %}

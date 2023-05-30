@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const articleContent = document.getElementById("article-content");
+  const initialData = articleContent.value;
   const editor = new EditorJS({
     autofocus: true,
     holder: "editorjs",
@@ -23,24 +25,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
     },
     paragraph: { class: Paragraph },
+
+    onReady: async () => {
+      if (articleContent.dataset.articleMode === "edit") {
+        await editor.blocks.renderFromHTML(initialData);
+      }
+    },
   });
 
-  const createArticleButton = document.getElementById("create-article-btn");
-  const createArticleForm = document.getElementById("create-article-form");
-  const inputContent = document.createElement("input");
-  inputContent.setAttribute("type", "hidden");
-  inputContent.setAttribute("name", "content");
-  createArticleForm.appendChild(inputContent);
+  const submitArticleButton = document.getElementById("submit-article-btn");
+  const articleForm = document.getElementById("article-form");
 
-  createArticleButton.addEventListener("click", function (event) {
+  submitArticleButton.addEventListener("click", function (event) {
     event.preventDefault();
 
     editor.save().then((outputData) => {
       const edjsParser = edjsHTML();
       let result = edjsParser.parse(outputData).join("\n");
-      inputContent.setAttribute("value", `${result}`);
+      articleContent.value = result;
 
-      createArticleForm.submit();
+      articleForm.submit();
     });
   });
 });
