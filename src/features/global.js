@@ -22,7 +22,6 @@ export const update = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 
@@ -41,7 +40,6 @@ export const update = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 };

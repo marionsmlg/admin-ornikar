@@ -45,7 +45,6 @@ export const article = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 
@@ -60,7 +59,6 @@ export const article = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 
@@ -74,7 +72,6 @@ export const article = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 };
@@ -90,7 +87,6 @@ export const articleCategory = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 
@@ -109,7 +105,6 @@ export const articleCategory = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 
@@ -123,7 +118,6 @@ export const articleCategory = {
       throw error;
     } finally {
       await trx.destroy();
-      await db.destroy();
     }
   },
 };
