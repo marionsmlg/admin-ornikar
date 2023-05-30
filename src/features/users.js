@@ -31,6 +31,7 @@ export const sessionId = {
       throw error;
     } finally {
       await trx.destroy();
+      await db.destroy();
     }
   },
   remove: async function removeSessionId(sessionId) {
@@ -45,6 +46,7 @@ export const sessionId = {
       throw error;
     } finally {
       await trx.destroy();
+      await db.destroy();
     }
   },
 };
@@ -95,6 +97,7 @@ export const user = {
       throw error;
     } finally {
       await trx.destroy();
+      await db.destroy();
     }
   },
 };

@@ -15,10 +15,7 @@ export default db;
 export async function fetchDataFromTable(tableName) {
   const trx = await db.transaction();
   try {
-    const data = await trx(tableName)
-      .select("*")
-      .orderBy("created_at", "desc")
-      .transacting(trx);
+    const data = await trx(tableName).select("*").orderBy("created_at", "desc");
     await trx.commit();
     return data;
   } catch (error) {
@@ -26,5 +23,6 @@ export async function fetchDataFromTable(tableName) {
     throw error;
   } finally {
     await trx.destroy();
+    await db.destroy();
   }
 }
