@@ -36,8 +36,8 @@
 
         <h2 class="text-lg font-semibold  pt-8 pb-2">3 derniers articles</h2>
         <div class="border border-black rounded-md">
+            {% include "src/template/delete-article-modal.njk" %}
             {% for article in highlightArticles %}
-                {% include "src/template/delete-article-modal.njk" %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">

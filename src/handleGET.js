@@ -6,6 +6,7 @@ import nunjucks from "nunjucks";
 import cookie from "cookie";
 import "dotenv/config";
 import { fetchDataFromTable } from "./utils-database.js";
+import db from "./utils-database.js";
 
 export async function handleGET(request, response, requestURLData) {
   if (path.extname(requestURLData.pathname) !== "") {
@@ -90,20 +91,41 @@ export async function handleGET(request, response, requestURLData) {
   }
 
   const searchParams = Object.fromEntries(requestURLData.searchParams);
-  const articles = await fetchDataFromTable("article");
+  const articles = await db("article").select("*");
   const article = articles.find((article) => article.id === basenameURL);
   const cookieLogin = cookie.parse(request.headers.cookie || "");
   const sessionId = cookieLogin.sessionId;
 
+  //PAGINATION
+
+  const articlesPerPage = 5;
+  const totalArticles = articles.length;
+  const currentPage = Math.round(searchParams.page) || 1;
+  const offset = (currentPage - 1) * articlesPerPage;
+
+  console.log({ offset, currentPage });
+
   const templateData = {
     searchParams: searchParams,
-    highlightArticles: articles.slice(0, 3),
-    articles: articles,
+    highlightArticles: await db("article")
+      .select("*")
+      .orderByRaw("COALESCE(updated_at, created_at) DESC")
+      .limit(3),
+    articles: await db("article")
+      .select("*")
+      .orderByRaw("COALESCE(updated_at, created_at) DESC")
+      .limit(articlesPerPage)
+      .offset(offset),
     article: article,
-    articleCategories: await fetchDataFromTable("article_category"),
-    dataNavbar: await fetchDataFromTable("header_link"),
-    footerLinks: await fetchDataFromTable("footer_link"),
-    footerSocialMedia: await fetchDataFromTable("footer_social_media"),
+    pagination: {
+      currentPage: currentPage,
+      totalArticles: totalArticles,
+      totalPages: Math.ceil(totalArticles / articlesPerPage),
+    },
+    articleCategories: await db("article_category").select("*"),
+    dataNavbar: await db("header_link").select("*"),
+    footerLinks: await db("footer_link").select("*"),
+    footerSocialMedia: await db("footer_social_media").select("*"),
     userEmail: await user.getEmail(sessionId),
   };
 

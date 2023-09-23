@@ -1,10 +1,11 @@
 import { user } from "./users.js";
 import { z } from "zod";
 import db from "../utils-database.js";
-import { fetchDataFromTable } from "../utils-database.js";
 
 export async function articleIDExists(id) {
-  const articles = await fetchDataFromTable("article");
+  const articles = await db("article")
+    .select("*")
+    .orderBy("created_at", "desc");
   const article = articles.find((article) => article.id === id);
   return Boolean(article);
 }
@@ -19,8 +20,9 @@ export function getCategoryNameById(id, dataArticlesCategories) {
 export function dataArticleAreValid(articleData) {
   const articleSchema = z.object({
     title: z.string().min(5).max(100),
+    category_id: z.string().uuid(),
     img: z.string().url(),
-    content: z.string().min(100),
+    content: z.string(),
   });
   return articleSchema.safeParse(articleData).success;
 }
@@ -36,88 +38,35 @@ export function dataCategoryIsValid(data) {
 export const article = {
   add: async function (form, sessionId) {
     form.created_by = await user.getId(sessionId);
-    const trx = await db.transaction();
-    try {
-      await trx("article").insert(form);
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
-    }
+    await db("article").insert(form);
   },
 
   update: async function (form, articleId, sessionId) {
     form.updated_by = await user.getId(sessionId);
-    const trx = await db.transaction();
-    try {
-      await trx("article").where({ id: articleId }).update(form);
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
-    }
+    await db("article").where({ id: articleId }).update(form);
   },
 
   delete: async function (articleId) {
-    const trx = await db.transaction();
-    try {
-      await trx("article").where(articleId).del();
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
-    }
+    await db("article").where(articleId).del();
   },
 };
 
 export const articleCategory = {
   add: async function (form) {
-    const trx = await db.transaction();
-    try {
-      await trx("article_category").insert(form);
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
-    }
+    await db("article_category").insert(form);
   },
 
   update: async function (form) {
     const arrOfArticleId = Object.keys(form);
-    const trx = await db.transaction();
-    try {
-      for (const articleId of arrOfArticleId) {
-        await trx("article_category")
-          .where({ id: articleId })
-          .update({ name: form[articleId] });
-      }
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
+    for (const articleId of arrOfArticleId) {
+      await db("article_category")
+        .where({ id: articleId })
+        .update({ name: form[articleId] });
     }
   },
 
   delete: async function (articleId) {
     const trx = await db.transaction();
-    try {
-      await trx("article_category").where(articleId).del();
-      await trx.commit();
-    } catch (error) {
-      await trx.rollback();
-      throw error;
-    } finally {
-      await trx.destroy();
-    }
+    await db("article_category").where(articleId).del();
   },
 };

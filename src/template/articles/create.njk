@@ -42,12 +42,12 @@
 
         <form method="POST" id="article-form">
             <div class="flex flex-col pb-4">
-                <label for="title" class="pb-2 font-semibold">Titre</label>
+                <label for="title" class="pb-2 font-semibold">Titre<span class="text-red-600"> *</span></label>
                 <input required name="title" id="title" class="py-1.5 text-sm border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2"/>
             </div>
 
             <div class="pb-4">
-                <label for="category" class="pb-2 font-semibold">Catégorie</label>
+                <label for="category" class="pb-2 font-semibold">Catégorie<span class="text-red-600"> *</span></label>
                 <div class="mt-2">
                     <select id="categoryId" name="category_id" class="py-1.5 text-sm focus:ring-0 border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2 py-1">
                         <option value="">--Sélectionnez une catégorie--</option>
@@ -74,12 +74,12 @@
             </div>
 
             <div class="flex flex-col pb-4">
-                <label for="image" class="pb-2 font-semibold">Image</label>
+                <label for="image" class="pb-2 font-semibold">Image<span class="text-red-600"> *</span></label>
                 <input required name="img" alt="image" value="" class="py-1.5 text-sm border border-gray-300 pl-2 rounded-md outline-none focus:border-indigo-600 focus:border-2" id="image"/>
             </div>
 
             <div>
-                <label for="content" class="pb-2 font-semibold">Contenu</label>
+                <label for="content" class="pb-2 font-semibold">Contenu<span class="text-red-600"> *</span></label>
                 <div class="mt-2">
                     <input type="hidden" id="article-content" name="content" data-article-mode="create"/>
                     <div id="editorjs" class="prose prose-a:text-blue-600 hover:prose-a:text-blue-500 px-3 pt-3 mt-1 max-w-none rounded-md border-0 text-gray-900 ring-1 ring-gray-300 ring-inset hover:ring-2 hover:ring-inset hover:ring-indigo-600"></div>

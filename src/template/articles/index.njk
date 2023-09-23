@@ -34,12 +34,11 @@
         </div>
     {% endif %}
 
-    {% set totalArticles = articles.length %}
     <main>
 
         <div class="flex justify-between pb-8">
 
-            <h1 class="text-2xl  font-semibold ">Articles ({{totalArticles}})</h1>
+            <h1 class="text-2xl  font-semibold ">Articles ({{pagination.totalArticles}})</h1>
 
             <a href="/articles/create">
                 {{button.primary("+ Nouveau")}}
@@ -47,15 +46,9 @@
 
         </div>
 
-        {% set articlesPerPage = 5 %}
-        {% set currentPage = searchParams.page | default(1) | int %}
-        {% set totalPages = (totalArticles / articlesPerPage) | round(0, "ceil") %}
-        {% set startIndex = (currentPage - 1) * articlesPerPage %}
-        {% set endIndex = startIndex + articlesPerPage %}
-
         <div class="border border-black rounded-md">
 
-            {% for article in articles.slice(startIndex, endIndex) %}
+            {% for article in articles %}
 
                 <div class="border border-transparent border-b-black last:border-b-transparent flex px-3 py-3 items-center">
                     <div class="w-1/6 ">
@@ -101,15 +94,15 @@
         {% include "src/template/delete-article-modal.njk" %}
 
         <div class="flex py-10 justify-between">
-            {% if currentPage > 1 %}
-                <a href="/articles?page={{ currentPage - 1 }}">
-                    {{button.primary("Page précédente",{"type": "submit"})}}
+            {% if pagination.currentPage > 1 %}
+                <a href="/articles?page={{ pagination.currentPage - 1 }}">
+                    {{button.primary("Page précédente",{"type": "submit", "id":"previous-btn"})}}
                 </a>
             {% endif %}
-            <p class="flex">Page {{currentPage}}/{{totalPages}}</p>
-            {% if currentPage < totalPages %}
-                <a href="/articles?page={{ currentPage + 1}}">
-                    {{button.primary("Page suivante",{"type": "submit"})}}
+            <p class="flex">Page {{pagination.currentPage}}/{{pagination.totalPages}}</p>
+            {% if pagination.currentPage < pagination.totalPages %}
+                <a href="/articles?page={{ pagination.currentPage + 1}}">
+                    {{button.primary("Page suivante",{"type": "submit", "id": "next-btn"})}}
                 </a>
             {% endif %}
 

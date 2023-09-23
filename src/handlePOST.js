@@ -12,7 +12,7 @@ import {
   sessionId,
   user,
 } from "./features/users.js";
-import { update } from "./features/global.js";
+import { update } from "./features/layout.js";
 import path from "path";
 import cookie from "cookie";
 import { v4 as uuidv4 } from "uuid";
